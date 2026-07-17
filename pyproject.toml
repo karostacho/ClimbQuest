@@ -1,2 +1,21 @@
+[project]
+name = "climbquest-backend"
+version = "0.1.0"
+requires-python = ">=3.12"
+# Keep in sync with backend/requirements.txt (used for local dev / pytest).
+dependencies = [
+  "fastapi==0.115.6",
+  "uvicorn[standard]==0.34.0",
+  "sqlalchemy==2.0.36",
+  "alembic==1.14.0",
+  "psycopg[binary]==3.2.3",
+  "pydantic[email]==2.10.4",
+  "pydantic-settings==2.7.0",
+  "passlib==1.7.4",
+  "bcrypt==4.0.1",
+  "pyjwt==2.10.1",
+  "python-dotenv==1.0.1",
+]
+
 [tool.vercel]
 entrypoint = "backend.api.index:app"
