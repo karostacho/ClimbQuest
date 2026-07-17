@@ -1,0 +1,13 @@
+.venv/
+__pycache__/
+*.pyc
+.DS_Store
+*.log
+
+# Already tracked in its own separate repo (github.com/karostacho/Climbing_Journal_WebApp)
+Climbing_Journal_WebApp/
+
+# Claude Code local session state, not part of the app
+.claude/
+.agents/
+skills-lock.json

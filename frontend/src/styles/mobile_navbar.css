@@ -1,0 +1,95 @@
+/* Hide navbar initially */
+.navbar-mobile {
+    display: none;
+}
+
+#navbar-logo-mobile {
+    height: 35px;
+    float: left;
+}
+
+/* Styles for hamburger button */
+#navbar-menu-btn {
+    background-color: white;
+    color: rgb(51, 51, 51);
+    padding-bottom: 3px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    font-size: 36px;
+    transition: background-color 0.2s;
+}
+
+#navbar-menu-btn:hover {
+    background-color: gray;
+}
+
+/* Styles for hamburger menu */
+.menu-mobile {
+    display: none;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    z-index: 999;
+}
+
+.menu-mobile ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu-mobile li {
+    display: flex;
+    justify-content: flex-end;
+    margin-left: 20px;
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+}
+
+.menu-mobile a {
+    color: black;
+    list-style: none;
+    text-decoration: none;
+    font-family: "Poppins";
+    font-weight: 400;
+    line-height: 30px;
+    letter-spacing: 0.05px;
+    text-align: center;
+    font-size: 20px;
+}
+
+.menu-mobile a:hover {
+    background-color: rgba(151, 71, 255, 0.07);
+    color: rgba(98, 77, 227, 1);
+}
+
+.inactive-link a {
+    pointer-events: none;
+    opacity: 0.5;
+    color: gray;
+    text-decoration: none;
+    cursor: default;
+}
+
+@media (max-width: 1025px) {
+    .menu-mobile {
+        display: none;
+    }
+
+    /* Make navbar visible when javascript toggles it's class to open */
+    .menu-mobile.open {
+        display: block;
+    }
+
+    .navbar-mobile {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.2rem 2rem;
+    }
+}

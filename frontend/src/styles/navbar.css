@@ -1,0 +1,291 @@
+/* Navbar */
+
+.navbar {
+    display: flex;
+    align-items: center;
+    box-shadow: 0px, 20px, 0, 20px rgba(80, 75, 75, 0.08);
+}
+
+/* Settings for all buttons on navbar */
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+    padding-top: 0.5rem;
+    padding-left: 8%;
+    padding-right: 8%;
+}
+
+.navbar-wrapper {
+    display: flex;
+    justify-content: right;
+}
+
+.navbar li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-wrap: nowrap;
+    border-radius: 8px;
+    color: white;
+    text-align: center;
+    list-style-type: none;
+    margin-right: 2rem;
+    margin-left: 2rem;
+}
+
+.navbar a {
+    color: black;
+    list-style: none;
+    text-decoration: none;
+    font-family: "Poppins";
+    font-weight: 400;
+    line-height: 30px;
+    letter-spacing: 0.05px;
+    text-align: center;
+    font-size: 20px;
+}
+
+/* Logo */
+
+.navbar img {
+    height: 62px;
+    width: 142px;
+    margin-top: 10px;
+    margin-bottom: 0px;
+}
+
+/* Login button */
+
+.navbar a.login {
+    display: inline-block;
+    border-radius: 8px;
+    border: 1px solid rgba(98, 77, 227, 1);
+    padding: 12px 30px;
+}
+
+.navbar a.login:hover {
+    background-color: rgba(151, 71, 255, 0.07);
+    color: rgba(98, 77, 227, 1);
+}
+
+/* Converter button */
+
+.navbar li.grade-converter-tab {
+    border-bottom: 4px solid transparent;
+    border-bottom-color: rgba(98, 77, 227, 1);
+    border-radius: 0px;
+}
+
+.navbar .grade-converter-tab a:hover {
+    background-color: rgba(151, 71, 255, 0.07);
+    color: rgba(98, 77, 227, 1);
+}
+
+/* Journal button inactive - if logged out*/
+
+.journal-tab-inactive {
+    color: rgba(158, 158, 158, 1);
+    list-style: none;
+    text-decoration: none;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    line-height: 30px;
+    letter-spacing: 0.05px;
+    text-align: center;
+    font-size: 20px;
+    border: none;
+    background-color: white;
+    cursor: pointer;
+}
+
+/* Not logged-in pop-up window */
+
+.not-logged-in-window {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    width: 720px;
+    height: 380px;
+    background-color: white;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 15px;
+    border: 0.25px;
+    border-style: solid;
+    border-color: rgba(98, 77, 227, 1);
+    margin: 0;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+}
+
+.pop-up-window {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.not-logged-in-window h1 {
+    font-family: "Poppins", sans-serif;
+    font-weight: 500;
+    font-size: 150%;
+    line-height: 36px;
+    text-align: center;
+    margin-top: 5%;
+}
+
+.text-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 16%;
+    margin-left: 16%;
+    padding: 0;
+}
+
+.not-logged-in-window p {
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    font-size: 120%;
+    line-height: 30px;
+}
+
+.buttons {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 4%;
+}
+
+.sign-up-button {
+    width: 352px;
+    height: 20px;
+    border-radius: 8px;
+    padding: 10px;
+    gap: 10px;
+    border: 1px;
+    border-style: solid;
+    border-color: rgba(98, 77, 227, 1);
+    background-color: rgba(255, 255, 255, 1);
+    margin-bottom: 2%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.not-logged-in-window a {
+    text-align: center;
+}
+
+.not-logged-in-window a.sign_up {
+    font-family: "Inter";
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 22px;
+    color: rgba(0, 0, 0, 1);
+    width: 100%;
+    height: 100%;
+}
+
+.log-in-button {
+    width: 352px;
+    height: 20px;
+    border-radius: 8px;
+    padding: 10px;
+    gap: 10px;
+    border: 1px;
+    border-style: solid;
+    border-color: rgba(98, 77, 227, 1);
+    background-color: rgba(98, 77, 227, 1);
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.log-in-button a {
+    font-family: "Inter";
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 22px;
+    letter-spacing: 0em;
+    text-align: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 1);
+    width: 100%;
+    height: 100%;
+}
+
+/* Close pop-up button */
+
+.close-window {
+    color: black;
+    float: right;
+    margin-right: 2%;
+    margin-top: 2%;
+    font-size: 34px;
+    cursor: pointer;
+}
+
+/* Journal button active - if logged in*/
+
+.journal-dropdown {
+    position: relative;
+}
+
+.journal-tab {
+    color: black;
+    list-style: none;
+    text-decoration: none;
+    font-family: "Poppins", sans-serif;
+    font-weight: 400;
+    line-height: 30px;
+    letter-spacing: 0.05px;
+    text-align: center;
+    font-size: 20px;
+    border: none;
+    background-color: white;
+}
+
+.journal-dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: white;
+    border-radius: 0px 0px 8px 8px;
+    z-index: 4;
+}
+
+.journal-dropdown:hover .journal-tab {
+    background-color: rgba(151, 71, 255, 0.07);
+    color: rgba(98, 77, 227, 1);
+}
+
+.journal-dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+}
+
+.journal-dropdown:hover .journal-dropdown-content {
+    display: block;
+}
+
+.journal-dropdown-content a:hover {
+    border-left: 3px solid transparent;
+    border-left-color: rgba(98, 77, 227, 1);
+}
+
+@media (max-width: 1025px) {
+    .navbar {
+        display: none;
+    }
+}

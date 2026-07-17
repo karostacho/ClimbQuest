@@ -1,0 +1,338 @@
+body {
+    margin: 0;
+    padding: 0px;
+}
+
+/* Routes section*/
+
+.routes-section {
+    text-align: center;
+    width: 100%;
+    height: auto;
+    top: 200px;
+    border-radius: 20px 20px 0px 0px;
+    position: absolute;
+    background-color: rgba(255, 255, 255, 1);
+}
+
+/* Add new route button */
+
+.button-route-section {
+    display: flex;
+    justify-content: center;
+}
+
+.add-route-btn {
+    width: 204px;
+    height: 44px;
+    top: 256px;
+    border-radius: 8px;
+    border-color: rgba(98, 77, 227, 1);
+    padding: 17px, 30px, 17px, 30px;
+    gap: 10px;
+    background-color: rgba(98, 77, 227, 1);
+    color: rgba(255, 255, 255, 1);
+    font-size: 18px;
+    font-weight: 500;
+    font-family: 'Inter';
+    line-height: 21.78px;
+    position: absolute;
+    z-index: 100;
+    display: block;
+    cursor: pointer;
+}
+
+.fa-plus{
+	color:#ffffff
+}
+
+/* Modal window*/
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 100;
+    width: 85vw;
+    height: 85vh;
+    background-color: white;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    overflow: auto;
+    box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
+	flex-direction: column;
+}
+
+.modal-add-route-form {
+    display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding: 0% 5%;
+}
+
+.modal-add-form-first-line{
+	display: flex;
+	justify-content: space-between;
+}
+
+/* Title in modal window */
+
+.modal-add-route-form h2 {
+    font-family: "Poppins";
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 20px;
+    text-align: center;
+    
+}
+
+/* Close modal button */
+
+.close {
+    color: black;
+    float: right;
+    font-size: 34px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 0.5%;
+    margin-right: 0.5%;
+}
+
+/* Text fields */
+
+.fields-name {
+    font-family: 'Inter';
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 19.6px;
+}
+
+::placeholder {
+    color: rgba(207, 208, 215, 1);
+}
+
+.field {
+    float: left;
+    text-align: left;
+}
+
+.field-comment{
+	float: left;
+    text-align: left;
+	width: 100%;
+}
+
+.field-input {
+	width:35vw;
+    height: 42px;
+    border-radius: 8px;
+    border: 1px;
+    border-style: solid;
+    border-color: rgba(207, 208, 215, 1);
+    color: black
+}
+
+.route-and-date-fields {
+    display: flex;
+    align-items: center;
+    
+}
+
+#comment.field-input {
+    width:100%
+}
+
+input {
+    font-family: 'Inter';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 19.6px;
+    color: black
+}
+
+/* Grade dropdowns */
+
+.modal-dropdown-section {
+    display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.grade-dropdowns {
+	display: inline-block;
+	padding: 5px 10px;
+	margin-left: 1.5rem;
+	margin-right: 1.5rem;
+}
+#french,
+#kurtyka,
+#uiaa,
+#usa,
+#british,
+#v_scale,
+#font_scale {
+    width: 90px;
+    height: 36px;
+    border-radius: 8px;
+    border-color: rgba(0, 0, 0, 0.1);
+    padding: 8px, 16px, 8px, 16px;
+    border: 1px, 1px, 1px, 1px;
+}
+
+.comment-and-dropdowns {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
+.modal-add-route-form p {
+    font-family: "Poppins";
+    font-weight: 500;
+    font-size: 18px;
+    ;
+}
+
+.grade-dropdowns label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+.grade-dropdowns select {
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 500;
+}
+
+/* Submit route button*/
+
+.modal-submit-btn button{
+    width: 365px;
+    height: 56px;
+    border-radius: 8px;
+    padding: 17px, 30px, 17px, 30px;
+    background-color: rgba(98, 77, 227, 1);
+    color: rgba(255, 255, 255, 1);
+    font-size: 18px;
+    font-weight: 500;
+    font-family: 'Inter';
+    line-height: 22px;
+    cursor: pointer;
+}
+
+/* Table */
+
+.grade-filter {
+    float: right;
+    margin-right: 15%;
+    margin-bottom: 1%;
+}
+
+#grade-filter {
+    width: 102px;
+    height: 40px;
+    border-radius: 8px;
+    border-color: rgba(208, 213, 221, 1);
+    padding: 10px, 12px, 10px, 16px;
+    border: 1px, 1px, 1px, 1px;
+}
+
+.grade-filter label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    text-align: left;
+}
+
+.grade-filter select {
+    margin-top: 5%;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    line-height: 20px;
+    font-size: 14px;
+    text-align: center;
+}
+
+.table-section table {
+    width: 80%;
+    max-height: 80%;
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+.table-section {
+    overflow-y: auto;
+    height: 60vh;
+    background-color: #fff;
+    margin-top: 8%
+}
+
+th {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    height: 46px;
+}
+
+th[scope=row] {
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+}
+
+.headers th {
+    font-size: 14px;
+    font-family: "Poppins";
+    font-weight: 700;
+    line-height: 21px;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 8px;
+    height: 46px;
+    font-size: 14px;
+    font-family: "Poppins";
+    font-weight: 400;
+    line-height: 21px;
+}
+
+tr:nth-child(odd) {
+    background-color: rgba(247, 246, 254, 1)
+}
+
+th {
+    background-color: rgba(255, 255, 255, 1);
+}
+
+.fa-sort {
+    color: rgba(158, 158, 158, 1);
+    text-decoration: none;
+}
+
+.fa-trash-can {
+    color: #a30d11;
+    text-decoration: none
+}
+
+@media (max-width: 1025px) {
+    .routes-section {
+        top: 165px;
+    }
+
+    .titles h1 {
+        font-size: 24px;
+        line-height: 36px;
+        letter-spacing: 0.05px;
+        font-weight: 400;
+    }
+}
