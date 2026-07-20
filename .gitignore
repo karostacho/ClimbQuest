@@ -11,3 +11,6 @@ Climbing_Journal_WebApp/
 .claude/
 .agents/
 skills-lock.json
+
+.vercel
+.env*
