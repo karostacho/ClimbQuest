@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -10,6 +10,15 @@ from app.routers import auth, routes
 logging.basicConfig(level=logging.INFO)
 
 app = FastAPI(title="ClimbQuest API")
+
+
+@app.middleware("http")
+async def no_store_for_api(request: Request, call_next):
+    response = await call_next(request)
+    if request.url.path.startswith("/api/"):
+        response.headers["Cache-Control"] = "no-store"
+    return response
+
 
 app.include_router(auth.router)
 app.include_router(routes.router)
