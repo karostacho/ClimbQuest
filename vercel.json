@@ -3,9 +3,5 @@
     "backend/api/index.py": {
       "maxDuration": 10
     }
-  },
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/backend/api/index.py" },
-    { "source": "/(.*)", "destination": "/backend/api/index.py" }
-  ]
+  }
 }
