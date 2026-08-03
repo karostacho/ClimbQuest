@@ -49,7 +49,7 @@ body {
 /* Modal window*/
 
 .modal {
-    display: none;
+    display: flex;
     position: fixed;
     z-index: 100;
     width: 85vw;
@@ -70,12 +70,14 @@ body {
     display: flex;
 	flex-direction: column;
 	justify-content: center;
-	padding: 0% 5%;
+	gap: 1.25rem;
+	padding: 1.5rem 5%;
 }
 
 .modal-add-form-first-line{
 	display: flex;
 	justify-content: space-between;
+	gap: 1.5rem;
 }
 
 /* Title in modal window */
@@ -115,24 +117,28 @@ body {
 }
 
 .field {
-    float: left;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
     text-align: left;
 }
 
-.field-comment{
-	float: left;
+.field-comment {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
     text-align: left;
-	width: 100%;
+    width: 100%;
 }
 
 .field-input {
-	width:35vw;
+	width: 35vw;
     height: 42px;
+    padding: 0 12px;
     border-radius: 8px;
-    border: 1px;
-    border-style: solid;
-    border-color: rgba(207, 208, 215, 1);
-    color: black
+    border: 1px solid rgba(207, 208, 215, 1);
+    color: black;
+    box-sizing: border-box;
 }
 
 .route-and-date-fields {
@@ -162,7 +168,9 @@ input {
 }
 
 .grade-dropdowns {
-	display: inline-block;
+	display: flex;
+	flex-direction: column;
+	gap: 0.3rem;
 	padding: 5px 10px;
 	margin-left: 1.5rem;
 	margin-right: 1.5rem;

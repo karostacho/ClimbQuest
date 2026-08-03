@@ -60,7 +60,6 @@ export function AddRouteModal({ onClose, onSubmit }: AddRouteModalProps) {
               <label className="fields-name" htmlFor="route_name">
                 Route name:
               </label>
-              <br />
               <input
                 className="field-input"
                 type="text"
@@ -75,7 +74,6 @@ export function AddRouteModal({ onClose, onSubmit }: AddRouteModalProps) {
               <label className="fields-name" htmlFor="date">
                 Date:
               </label>
-              <br />
               <input
                 className="field-input"
                 type="date"
@@ -94,7 +92,6 @@ export function AddRouteModal({ onClose, onSubmit }: AddRouteModalProps) {
                 <label className="fields-name" htmlFor="comment">
                   Comment:
                 </label>
-                <br />
                 <input
                   className="field-input"
                   id="comment"
@@ -112,7 +109,6 @@ export function AddRouteModal({ onClose, onSubmit }: AddRouteModalProps) {
             {(Object.keys(ROCK_SCALE_LISTS) as RockScale[]).map((scale) => (
               <div className="grade-dropdowns" key={scale}>
                 <label htmlFor={scale}>{SCALE_LABELS[scale]}</label>
-                <br />
                 <select
                   id={scale}
                   value={selectedScale === scale ? selectedGrade : ''}
