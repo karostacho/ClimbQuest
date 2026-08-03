@@ -1,86 +1,84 @@
 html,
 body {
-    height: 100vh;
+    height: 100%;
     margin: 0;
 }
 
 .content-wrapper {
-    float: left;
-    width: 65%;
-    height: 100vh;
     display: flex;
-    position: absolute;
-    border-radius: 20px;
-    z-index: 100;
+    min-height: 100vh;
+    width: 100%;
     background-color: rgba(255, 255, 255, 1);
 }
 
 /* Logo */
 
 .logo-container {
-    float: left;
+    display: flex;
+    align-items: flex-start;
+    padding: 2.5rem 0 0 4%;
 }
 
 .logo {
-    height: 62px;
-    width: 142px;
-    margin-left: 18%;
-    margin-top: 15%;
+    height: 48px;
+    width: auto;
 }
 
-/* Login section */
+/* Login/signup section */
 
 .form-container {
-    width: 100%;
+    flex: 1 1 60%;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding-right: 5rem;
+    padding: 3rem;
+    box-sizing: border-box;
 }
 
-.successfull_register_container{
+.successfull_register_container {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
-.field {
-    margin-bottom: 3%;
-}
-
 .form-body {
-    width: 60%;
+    width: 100%;
     max-width: 400px;
-    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
 }
 
 .form-body h1 {
     font-family: "Poppins", sans-serif;
     font-size: 150%;
     font-weight: 500;
-    line-height: 30px;
+    line-height: 1.3;
     letter-spacing: 0.05px;
     text-align: left;
-    color: rgba(0, 0, 0, 1)
+    color: rgba(0, 0, 0, 1);
+    margin: 0;
 }
 
-.form-body h3{
+.form-body h3 {
     font-family: "Poppins", sans-serif;
     font-size: 32px;
     font-weight: 500;
-    line-height: 30px;
+    line-height: 1.3;
     letter-spacing: 0.05px;
     text-align: left;
+    margin: 0;
 }
 
 .form-body p {
     font-family: "Poppins", sans-serif;
     font-size: 100%;
     font-weight: 500;
-    line-height: 21px;
+    line-height: 1.4;
     text-align: left;
     color: rgba(102, 112, 133, 1);
+    margin: 0;
 }
 
 .first-p {
@@ -91,9 +89,9 @@ body {
     font-family: "Poppins", sans-serif;
     font-size: 100%;
     font-weight: 400;
-    line-height: 19.6px;
-    margin-left: 7%;
-    color: rgba(17, 17, 17, 1)
+    line-height: 1.4;
+    color: rgba(17, 17, 17, 1);
+    margin: 0;
 }
 
 .second-p a {
@@ -101,58 +99,85 @@ body {
     font-weight: 400;
 }
 
+/* Fields */
+
+.field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
 .form-body label {
-    font-family: "Inter";
+    font-family: "Inter", sans-serif;
     font-size: 100%;
     font-weight: 400;
-    line-height: 19.6px;
+    line-height: 1.4;
     text-align: left;
-    color: black
+    color: black;
 }
 
 .box {
     width: 100%;
-    height: 42px;
+    height: 46px;
+    padding: 0 14px;
     border-radius: 8px;
-    border: 1px;
-    border-style: solid;
-    border-color: rgba(207, 208, 215, 1);
-    color: black
+    border: 1px solid rgba(207, 208, 215, 1);
+    color: black;
+    font-family: "Inter", sans-serif;
+    font-size: 1rem;
+    box-sizing: border-box;
+    transition: border-color 0.15s ease;
 }
 
-/* Submit login button */
-
-.submit-btn{
-    width: 106px;
-    height: 56px;
-    border-radius: 8px;
-    border: 1px;
-    margin-top: 4%;
-    border-style: solid;
+.box:focus {
+    outline: none;
     border-color: rgba(98, 77, 227, 1);
-    background-color: rgba(98, 77, 227, 1);
-    font-family: "Inter";
-    font-size: 120%;
+}
+
+.field-error {
+    color: rgba(255, 7, 7, 1);
+    font-family: "Poppins", sans-serif;
+    font-size: 14px;
     font-weight: 500;
-    line-height: 22px;
+    margin: 0;
+    min-height: 1em;
+}
+
+/* Submit button */
+
+.submit-btn-container {
+    margin-top: 0.5rem;
+}
+
+.submit-btn {
+    width: 100%;
+    height: 50px;
+    border-radius: 8px;
+    border: 1px solid rgba(98, 77, 227, 1);
+    background-color: rgba(98, 77, 227, 1);
+    font-family: "Inter", sans-serif;
+    font-size: 110%;
+    font-weight: 500;
     letter-spacing: 0em;
     text-align: center;
     color: rgba(255, 255, 255, 1);
     cursor: pointer;
+    transition: background-color 0.15s ease;
 }
 
-.back_to_login_btn{
-    width:auto;
-    height: 56px;
+.submit-btn:hover {
+    background-color: rgba(78, 61, 199, 1);
+}
+
+.back_to_login_btn {
+    width: auto;
+    height: 50px;
     border-radius: 8px;
-    border: 1px;
-    border-style: solid;
-    border-color: rgba(98, 77, 227, 1);
+    border: 1px solid rgba(98, 77, 227, 1);
     background-color: rgba(98, 77, 227, 1);
-    font-family: "Inter";
-    font-size: 120%;
+    font-family: "Inter", sans-serif;
+    font-size: 110%;
     font-weight: 500;
-    line-height: 22px;
     letter-spacing: 0em;
     text-align: center;
     color: rgba(255, 255, 255, 1);
@@ -161,91 +186,61 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-a.back_to_login_btn{
-    text-align: center;
+    padding: 0 1.5rem;
 }
 
 /* Flash message */
 
-.field p3 {
-    color: rgba(255, 7, 7, 1);
-    font-family: "Poppins";
-    font-size: 14px;
-    font-weight: 500;
-}
-
 .flash-message {
     color: rgba(255, 7, 7, 1);
-    font-family: "Poppins";
+    font-family: "Poppins", sans-serif;
     font-size: 14px;
     font-weight: 500;
-    margin-top: 2%;
-}
-
-.flash-message.error {
-    color: rgba(255, 7, 7, 1);
-    font-size: 14px;
-    font-family: "Poppins";
-    font-weight: 500;
+    margin: 0;
 }
 
 .flash-message.success {
     color: green;
-    font-size: 14px;
-    font-family: "Poppins";
-    font-weight: 500;
 }
 
 .flash-container {
     width: auto;
 }
 
-/* Graphic section*/
+/* Graphic section */
 
 .graphic {
     position: relative;
-    float: right;
     width: 40%;
-    height: 100%;
-    flex: 1;
+    flex-shrink: 0;
     overflow: hidden;
 }
 
 .graphic img {
     width: 100%;
-    height: 100vh;
+    height: 100%;
     object-fit: cover;
+    display: block;
 }
 
 @media (max-width: 1025px) {
-    .graphic {
-        display: none;
+    .content-wrapper {
+        flex-direction: column;
+        min-height: 100vh;
     }
 
+    .graphic,
     .logo-container {
         display: none;
     }
 
-    .content-wrapper {
-        display: flex;
-        height: max-content;
-        width: 100%;
-    }
-
     .form-container {
-        display: flex;
-        align-items: start;
-        width: 100%;
+        align-items: flex-start;
+        padding: 3rem 2rem;
         box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
-        padding-left: 2rem;
-        padding-right: 2rem;
-        padding-top: 3rem;
     }
 
     .form-body {
-        width: 100%;
-        max-width: 300px;
+        max-width: 100%;
     }
 }
