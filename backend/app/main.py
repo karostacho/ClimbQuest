@@ -13,9 +13,13 @@ app = FastAPI(title="ClimbQuest API")
 
 
 @app.middleware("http")
-async def no_store_for_api(request: Request, call_next):
+async def no_store_except_hashed_assets(request: Request, call_next):
     response = await call_next(request)
-    if request.url.path.startswith("/api/"):
+    # /assets/* filenames are content-hashed per build (safe to cache forever),
+    # but everything else - API responses and index.html - must never be
+    # served stale, or a cached index.html can end up referencing a
+    # since-deleted hashed asset from a previous build (blank page, 404s).
+    if not request.url.path.startswith("/assets/"):
         response.headers["Cache-Control"] = "no-store"
     return response
 
