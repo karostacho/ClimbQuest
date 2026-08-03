@@ -50,6 +50,15 @@ body {
     gap: 1.5rem;
 }
 
+/* The fields live inside a <form>, which is its own flex item within
+   form-body - without its own flex+gap, its children (each .field) would
+   have no spacing between them at all. */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
 .form-body h1 {
     font-family: "Poppins", sans-serif;
     font-size: 150%;
@@ -167,6 +176,11 @@ body {
 
 .submit-btn:hover {
     background-color: rgba(78, 61, 199, 1);
+}
+
+.submit-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
 }
 
 .back_to_login_btn {

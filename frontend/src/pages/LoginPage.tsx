@@ -12,15 +12,19 @@ export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError(null);
+    setIsSubmitting(true);
     try {
       await login(email, password);
       navigate('/journal');
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Something went wrong');
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -39,12 +43,12 @@ export function LoginPage() {
             <p>Please fill in your details to access your account</p>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form className="auth-form" onSubmit={handleSubmit}>
             <div className="field">
-              <label>E-mail</label>
-              <br />
+              <label htmlFor="email">E-mail</label>
               <input
                 className="box"
+                id="email"
                 type="text"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -53,10 +57,10 @@ export function LoginPage() {
             </div>
 
             <div className="field">
-              <label>Password</label>
-              <br />
+              <label htmlFor="password">Password</label>
               <input
                 className="box"
+                id="password"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -65,14 +69,16 @@ export function LoginPage() {
             </div>
 
             {error && (
-              <div className="flash-message" role="alert">
-                {error}
+              <div className="flash-container">
+                <div className="flash-message error" role="alert">
+                  {error}
+                </div>
               </div>
             )}
 
             <div className="submit-btn-container">
-              <button className="submit-btn" type="submit">
-                Login
+              <button className="submit-btn" type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Logging in…' : 'Login'}
               </button>
             </div>
           </form>

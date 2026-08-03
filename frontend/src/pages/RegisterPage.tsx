@@ -22,6 +22,7 @@ export function RegisterPage() {
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [mismatchError, setMismatchError] = useState<string | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   function validate(): boolean {
     const isEmailValid = EMAIL_REGEX.test(email);
@@ -40,11 +41,14 @@ export function RegisterPage() {
     setServerError(null);
     if (!validate()) return;
 
+    setIsSubmitting(true);
     try {
       await register(name, email, password);
       navigate('/register/success');
     } catch (err) {
       setServerError(err instanceof ApiError ? err.message : 'Something went wrong');
+    } finally {
+      setIsSubmitting(false);
     }
   }
 
@@ -63,16 +67,14 @@ export function RegisterPage() {
             <p>Please fill in your details to create your account</p>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form className="auth-form" onSubmit={handleSubmit}>
             <div className="field">
               <label htmlFor="name">Name</label>
-              <br />
               <input className="box" type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
             </div>
 
             <div className="field">
               <label htmlFor="email">E-mail</label>
-              <br />
               <input
                 className="box"
                 type="text"
@@ -81,12 +83,11 @@ export function RegisterPage() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <p className="field-error">{emailError}</p>
+              {emailError && <p className="field-error">{emailError}</p>}
             </div>
 
             <div className="field">
               <label htmlFor="password">Password</label>
-              <br />
               <input
                 className="box"
                 type="password"
@@ -95,12 +96,11 @@ export function RegisterPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-              <p className="field-error">{passwordError}</p>
+              {passwordError && <p className="field-error">{passwordError}</p>}
             </div>
 
             <div className="field">
               <label htmlFor="repeat_password">Repeat Password</label>
-              <br />
               <input
                 className="box"
                 type="password"
@@ -109,7 +109,7 @@ export function RegisterPage() {
                 onChange={(e) => setRepeatPassword(e.target.value)}
                 required
               />
-              <p className="field-error">{mismatchError}</p>
+              {mismatchError && <p className="field-error">{mismatchError}</p>}
             </div>
 
             {serverError && (
@@ -121,8 +121,8 @@ export function RegisterPage() {
             )}
 
             <div className="submit-btn-container">
-              <button className="submit-btn" type="submit">
-                Sign up
+              <button className="submit-btn" type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Signing up…' : 'Sign up'}
               </button>
             </div>
           </form>
