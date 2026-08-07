@@ -72,12 +72,16 @@
     color: rgba(98, 77, 227, 1);
 }
 
-/* Converter button */
+/* Converter / Journal tabs - underline shows whichever one is the current page */
 
-.navbar li.grade-converter-tab {
+.navbar li.grade-converter-tab,
+.navbar li.journal-dropdown {
     border-bottom: 4px solid transparent;
-    border-bottom-color: rgba(98, 77, 227, 1);
     border-radius: 0px;
+}
+
+.navbar li.active-tab {
+    border-bottom-color: rgba(98, 77, 227, 1);
 }
 
 .navbar .grade-converter-tab a:hover {
@@ -88,6 +92,9 @@
 /* Journal button inactive - if logged out*/
 
 .journal-tab-inactive {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
     color: rgba(158, 158, 158, 1);
     list-style: none;
     text-decoration: none;
@@ -100,6 +107,10 @@
     border: none;
     background-color: white;
     cursor: pointer;
+}
+
+.journal-tab-inactive .fa-lock {
+    font-size: 14px;
 }
 
 /* Not logged-in pop-up window */

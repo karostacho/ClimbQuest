@@ -2,12 +2,22 @@ import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { AddRouteModal } from './AddRouteModal';
+import type { Route } from '../api/routes';
+
+const EXISTING_ROUTE: Route = {
+  id: 1,
+  route_name: 'Perfecto Mundo',
+  grade_index: 1,
+  climb_date: '2026-01-01',
+  comment: 'Soft for the grade',
+  created_at: '2026-01-01T00:00:00Z',
+};
 
 describe('AddRouteModal', () => {
   it('blocks submit and shows an error when no grade is selected', async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
-    render(<AddRouteModal isSubmitting={false} onClose={vi.fn()} onSubmit={onSubmit} />);
+    render(<AddRouteModal isSubmitting={false} displayScale="french" onClose={vi.fn()} onSubmit={onSubmit} />);
 
     await user.type(screen.getByLabelText('Route name:'), 'Perfecto Mundo');
     await user.click(screen.getByRole('button', { name: 'Submit' }));
@@ -19,7 +29,7 @@ describe('AddRouteModal', () => {
   it('submits the resolved grade_index once a grade is picked', async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
-    render(<AddRouteModal isSubmitting={false} onClose={vi.fn()} onSubmit={onSubmit} />);
+    render(<AddRouteModal isSubmitting={false} displayScale="french" onClose={vi.fn()} onSubmit={onSubmit} />);
 
     await user.type(screen.getByLabelText('Route name:'), 'Perfecto Mundo');
     await user.selectOptions(screen.getByLabelText('French'), '1-');
@@ -32,7 +42,7 @@ describe('AddRouteModal', () => {
   });
 
   it('disables the submit button and shows a submitting label while isSubmitting is true', () => {
-    render(<AddRouteModal isSubmitting onClose={vi.fn()} onSubmit={vi.fn()} />);
+    render(<AddRouteModal isSubmitting displayScale="french" onClose={vi.fn()} onSubmit={vi.fn()} />);
 
     const button = screen.getByRole('button', { name: 'Submitting…' });
     expect(button).toBeDisabled();
@@ -41,7 +51,7 @@ describe('AddRouteModal', () => {
   it('ignores a submit attempt while already submitting', async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
-    render(<AddRouteModal isSubmitting onClose={vi.fn()} onSubmit={onSubmit} />);
+    render(<AddRouteModal isSubmitting displayScale="french" onClose={vi.fn()} onSubmit={onSubmit} />);
 
     // The button is disabled, so dispatch the form's submit event directly
     // to exercise the handleSubmit early-return guard itself.
@@ -50,5 +60,47 @@ describe('AddRouteModal', () => {
 
     await user.click(screen.getByRole('button', { name: 'Submitting…' }));
     expect(onSubmit).not.toHaveBeenCalled();
+  });
+
+  it('pre-fills fields and switches to "Save changes" when editing an existing route', () => {
+    render(
+      <AddRouteModal
+        isSubmitting={false}
+        editingRoute={EXISTING_ROUTE}
+        displayScale="french"
+        onClose={vi.fn()}
+        onSubmit={vi.fn()}
+      />,
+    );
+
+    expect(screen.getByLabelText('Route name:')).toHaveValue('Perfecto Mundo');
+    expect(screen.getByLabelText('Date:')).toHaveValue('2026-01-01');
+    expect(screen.getByLabelText('Comment:')).toHaveValue('Soft for the grade');
+    expect(screen.getByLabelText('French')).toHaveValue('1-');
+    expect(screen.getByRole('heading', { name: 'Edit route' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Save changes' })).toBeInTheDocument();
+  });
+
+  it('submits the edited values with the existing grade already resolved', async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn();
+    render(
+      <AddRouteModal
+        isSubmitting={false}
+        editingRoute={EXISTING_ROUTE}
+        displayScale="french"
+        onClose={vi.fn()}
+        onSubmit={onSubmit}
+      />,
+    );
+
+    const nameInput = screen.getByLabelText('Route name:');
+    await user.clear(nameInput);
+    await user.type(nameInput, 'Renamed route');
+    await user.click(screen.getByRole('button', { name: 'Save changes' }));
+
+    expect(onSubmit).toHaveBeenCalledWith(
+      expect.objectContaining({ route_name: 'Renamed route', grade_index: 1 }),
+    );
   });
 });

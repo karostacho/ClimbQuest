@@ -27,6 +27,10 @@ export function createRoute(route: NewRoute): Promise<Route> {
   return api.post<Route>('/routes', route);
 }
 
+export function updateRoute(id: number, route: NewRoute): Promise<Route> {
+  return api.put<Route>(`/routes/${id}`, route);
+}
+
 export function deleteRoute(id: number): Promise<void> {
   return api.delete<void>(`/routes/${id}`);
 }

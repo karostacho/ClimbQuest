@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import logo from '../assets/photos/logo.gif';
 import '../styles/navbar.css';
@@ -7,6 +7,7 @@ import '../styles/navbar.css';
 export function Navbar() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const [showLoggedOutNotice, setShowLoggedOutNotice] = useState(false);
 
   async function handleLogout() {
@@ -57,7 +58,7 @@ export function Navbar() {
             </div>
           )}
 
-          <li className="grade-converter-tab">
+          <li className={location.pathname === '/' ? 'grade-converter-tab active-tab' : 'grade-converter-tab'}>
             <Link className="grade-converter-tab" to="/">
               Grade converter
             </Link>
@@ -65,7 +66,7 @@ export function Navbar() {
 
           {user ? (
             <>
-              <li className="journal-dropdown">
+              <li className={location.pathname === '/journal' ? 'journal-dropdown active-tab' : 'journal-dropdown'}>
                 <Link className="journal-tab" to="/journal">
                   Journal
                 </Link>
@@ -79,8 +80,12 @@ export function Navbar() {
           ) : (
             <>
               <li className="journal-dropdown-inactive">
-                <button className="journal-tab-inactive" onClick={() => setShowLoggedOutNotice(true)}>
-                  Journal <i className="fa-solid fa-chevron-down" />
+                <button
+                  className="journal-tab-inactive"
+                  onClick={() => setShowLoggedOutNotice(true)}
+                  title="Log in to access your journal"
+                >
+                  <i className="fa-solid fa-lock" /> Journal
                 </button>
               </li>
               <li>

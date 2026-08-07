@@ -43,6 +43,7 @@ class UserCreate(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+    remember_me: bool = False
 
     @field_validator("email")
     @classmethod

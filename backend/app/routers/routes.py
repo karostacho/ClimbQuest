@@ -43,6 +43,26 @@ def create_route(
     return route
 
 
+@router.put("/{route_id}", response_model=RouteOut)
+def update_route(
+    route_id: int,
+    payload: RouteCreate,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> Route:
+    route = db.get(Route, route_id)
+    if route is None or route.user_id != current_user.id:
+        # Same 404 whether the route doesn't exist or belongs to someone
+        # else, matching delete's behavior below.
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Route not found")
+
+    for field, value in payload.model_dump().items():
+        setattr(route, field, value)
+    db.commit()
+    db.refresh(route)
+    return route
+
+
 @router.delete("/{route_id}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_route(
     route_id: int,

@@ -1,8 +1,16 @@
 import { useState, type FormEvent } from 'react';
-import { ROCK_SCALE_LISTS, findRockGradeIndex, type RockScale } from '../data/grades';
+import { ROCK_SCALE_LISTS, findRockGradeIndex, formatRockGrade, type RockScale } from '../data/grades';
+import type { Route } from '../api/routes';
 
 interface AddRouteModalProps {
   isSubmitting: boolean;
+  // When set, the modal edits this route instead of creating a new one, and
+  // is pre-filled with its current values.
+  editingRoute?: Route | null;
+  // Which scale to display/pre-select the existing grade in when editing -
+  // matches whatever scale the journal table is currently showing, so the
+  // value the user sees matches what they were just looking at.
+  displayScale: RockScale;
   onClose: () => void;
   onSubmit: (data: { route_name: string; grade_index: number; climb_date: string; comment?: string }) => void;
 }
@@ -25,13 +33,16 @@ function getLocalDateString(): string {
   return `${year}-${month}-${day}`;
 }
 
-export function AddRouteModal({ isSubmitting, onClose, onSubmit }: AddRouteModalProps) {
+export function AddRouteModal({ isSubmitting, editingRoute, displayScale, onClose, onSubmit }: AddRouteModalProps) {
+  const isEditing = !!editingRoute;
   const today = getLocalDateString();
-  const [routeName, setRouteName] = useState('');
-  const [date, setDate] = useState(today);
-  const [comment, setComment] = useState('');
-  const [selectedScale, setSelectedScale] = useState<RockScale | null>(null);
-  const [selectedGrade, setSelectedGrade] = useState('');
+  const [routeName, setRouteName] = useState(editingRoute?.route_name ?? '');
+  const [date, setDate] = useState(editingRoute?.climb_date ?? today);
+  const [comment, setComment] = useState(editingRoute?.comment ?? '');
+  const [selectedScale, setSelectedScale] = useState<RockScale | null>(editingRoute ? displayScale : null);
+  const [selectedGrade, setSelectedGrade] = useState(
+    editingRoute ? formatRockGrade(editingRoute.grade_index, displayScale) : '',
+  );
   const [error, setError] = useState<string | null>(null);
 
   function handleGradeChange(scale: RockScale, value: string) {
@@ -66,7 +77,7 @@ export function AddRouteModal({ isSubmitting, onClose, onSubmit }: AddRouteModal
         </div>
 
         <form className="modal-add-route-form" onSubmit={handleSubmit}>
-          <h2>Add new route to your journal</h2>
+          <h2>{isEditing ? 'Edit route' : 'Add new route to your journal'}</h2>
           <div className="modal-add-form-first-line">
             <div className="field">
               <label className="fields-name" htmlFor="route_name">
@@ -147,7 +158,7 @@ export function AddRouteModal({ isSubmitting, onClose, onSubmit }: AddRouteModal
 
           <div className="modal-submit-btn">
             <button type="submit" id="submitBtn" disabled={isSubmitting}>
-              {isSubmitting ? 'Submitting…' : 'Submit'}
+              {isSubmitting ? (isEditing ? 'Saving…' : 'Submitting…') : isEditing ? 'Save changes' : 'Submit'}
             </button>
           </div>
         </form>

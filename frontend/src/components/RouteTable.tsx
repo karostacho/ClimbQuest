@@ -6,10 +6,11 @@ interface RouteTableProps {
   scale: RockScale;
   onToggleDateOrder: () => void;
   onToggleGradeOrder: () => void;
+  onEdit: (route: Route) => void;
   onDelete: (id: number) => void;
 }
 
-export function RouteTable({ routes, scale, onToggleDateOrder, onToggleGradeOrder, onDelete }: RouteTableProps) {
+export function RouteTable({ routes, scale, onToggleDateOrder, onToggleGradeOrder, onEdit, onDelete }: RouteTableProps) {
   function handleDelete(id: number) {
     if (window.confirm('Are you sure you want to delete this route?')) {
       onDelete(id);
@@ -45,7 +46,18 @@ export function RouteTable({ routes, scale, onToggleDateOrder, onToggleGradeOrde
             <td>
               <div className="icons-container">
                 <div className="icons">
-                  <a href="#delete" onClick={(e) => { e.preventDefault(); handleDelete(route.id); }} className="fa-regular fa-trash-can fa-xl" />
+                  <a
+                    href="#edit"
+                    onClick={(e) => { e.preventDefault(); onEdit(route); }}
+                    className="fa-solid fa-pen fa-xl"
+                    title="Edit route"
+                  />
+                  <a
+                    href="#delete"
+                    onClick={(e) => { e.preventDefault(); handleDelete(route.id); }}
+                    className="fa-regular fa-trash-can fa-xl"
+                    title="Delete route"
+                  />
                 </div>
               </div>
             </td>

@@ -116,6 +116,20 @@ body {
     gap: 0.5rem;
 }
 
+.field-checkbox label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+}
+
+.field-checkbox input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: rgba(98, 77, 227, 1);
+    cursor: pointer;
+}
+
 .form-body label {
     font-family: "Inter", sans-serif;
     font-size: 100%;

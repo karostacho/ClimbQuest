@@ -14,8 +14,8 @@ export function register(name: string, email: string, password: string): Promise
   return api.post<User>('/auth/register', { name, email, password });
 }
 
-export function login(email: string, password: string): Promise<User> {
-  return api.post<User>('/auth/login', { email, password });
+export function login(email: string, password: string, rememberMe: boolean): Promise<User> {
+  return api.post<User>('/auth/login', { email, password, remember_me: rememberMe });
 }
 
 export function logout(): Promise<void> {

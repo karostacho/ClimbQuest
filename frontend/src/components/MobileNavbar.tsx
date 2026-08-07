@@ -59,8 +59,8 @@ export function MobileNavbar() {
                 </Link>
               </li>
               <li className="inactive-link">
-                <Link to="/login" onClick={() => setOpen(false)}>
-                  Journal
+                <Link to="/login" onClick={() => setOpen(false)} title="Log in to access your journal">
+                  <i className="fa-solid fa-lock" /> Journal
                 </Link>
               </li>
             </>

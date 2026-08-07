@@ -69,11 +69,16 @@
 }
 
 .inactive-link a {
-    pointer-events: none;
-    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    opacity: 0.6;
     color: gray;
     text-decoration: none;
-    cursor: default;
+}
+
+.inactive-link .fa-lock {
+    font-size: 0.85em;
 }
 
 @media (max-width: 1025px) {

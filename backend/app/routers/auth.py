@@ -88,11 +88,21 @@ def login(payload: UserLogin, request: Request, response: Response, db: Session 
     if not verify_password(payload.password, user.password_hash):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Incorrect email or password")
 
-    token = create_access_token(user.id)
+    if payload.remember_me:
+        expire_minutes = settings.jwt_remember_me_expire_minutes
+        cookie_max_age = expire_minutes * 60
+    else:
+        expire_minutes = settings.jwt_session_expire_minutes
+        # No max_age/expires: a true browser-session cookie, cleared when the
+        # browser closes. The JWT's own expiry (still set below) is the
+        # backstop for anyone who leaves the browser open across days.
+        cookie_max_age = None
+
+    token = create_access_token(user.id, expire_minutes=expire_minutes)
     response.set_cookie(
         settings.cookie_name,
         token,
-        max_age=settings.jwt_expire_minutes * 60,
+        max_age=cookie_max_age,
         **COOKIE_KWARGS,
     )
     return user

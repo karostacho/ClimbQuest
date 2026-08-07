@@ -332,6 +332,17 @@ th {
     text-decoration: none
 }
 
+.fa-pen {
+    color: rgba(98, 77, 227, 1);
+    text-decoration: none;
+}
+
+.icons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}
+
 @media (max-width: 1025px) {
     .routes-section {
         top: 165px;

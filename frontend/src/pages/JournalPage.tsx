@@ -2,7 +2,16 @@ import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
 import { ROCK_SCALE_LISTS, type RockScale } from '../data/grades';
-import { createRoute, deleteRoute, fetchRoutes, type SortBy, type SortOrder } from '../api/routes';
+import {
+  createRoute,
+  deleteRoute,
+  fetchRoutes,
+  updateRoute,
+  type NewRoute,
+  type Route,
+  type SortBy,
+  type SortOrder,
+} from '../api/routes';
 import { RouteTable } from '../components/RouteTable';
 import { AddRouteModal } from '../components/AddRouteModal';
 import background from '../assets/photos/background_image.jpg';
@@ -17,13 +26,17 @@ const SCALE_LABELS: Record<RockScale, string> = {
   british: 'British',
 };
 
+// Which route the modal is acting on: closed, adding a new one, or editing
+// an existing one.
+type ModalTarget = 'closed' | 'new' | Route;
+
 export function JournalPage() {
   const { user } = useAuth();
   const queryClient = useQueryClient();
   const [scale, setScale] = useState<RockScale>('french');
   const [sortBy, setSortBy] = useState<SortBy>('date');
   const [order, setOrder] = useState<SortOrder>('desc');
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modalTarget, setModalTarget] = useState<ModalTarget>('closed');
   const [actionError, setActionError] = useState<string | null>(null);
 
   const {
@@ -43,9 +56,19 @@ export function JournalPage() {
     onSuccess: () => {
       setActionError(null);
       queryClient.invalidateQueries({ queryKey: ['routes', user?.id] });
-      setModalOpen(false);
+      setModalTarget('closed');
     },
     onError: () => setActionError('Could not add that route. Please try again.'),
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: ({ id, data }: { id: number; data: NewRoute }) => updateRoute(id, data),
+    onSuccess: () => {
+      setActionError(null);
+      queryClient.invalidateQueries({ queryKey: ['routes', user?.id] });
+      setModalTarget('closed');
+    },
+    onError: () => setActionError('Could not save your changes. Please try again.'),
   });
 
   const deleteMutation = useMutation({
@@ -76,7 +99,7 @@ export function JournalPage() {
       </div>
 
       <div className="button-route-section">
-        <button className="add-route-btn" onClick={() => setModalOpen(true)}>
+        <button className="add-route-btn" onClick={() => setModalTarget('new')}>
           Add new route <i className="fa-solid fa-plus" />
         </button>
       </div>
@@ -113,16 +136,25 @@ export function JournalPage() {
               scale={scale}
               onToggleDateOrder={() => toggleOrder('date')}
               onToggleGradeOrder={() => toggleOrder('grade')}
+              onEdit={(route) => setModalTarget(route)}
               onDelete={(id) => deleteMutation.mutate(id)}
             />
           )}
         </div>
 
-        {modalOpen && (
+        {modalTarget !== 'closed' && (
           <AddRouteModal
-            isSubmitting={createMutation.isPending}
-            onClose={() => setModalOpen(false)}
-            onSubmit={(data) => createMutation.mutate(data)}
+            isSubmitting={createMutation.isPending || updateMutation.isPending}
+            editingRoute={modalTarget === 'new' ? null : modalTarget}
+            displayScale={scale}
+            onClose={() => setModalTarget('closed')}
+            onSubmit={(data) => {
+              if (modalTarget === 'new') {
+                createMutation.mutate(data);
+              } else {
+                updateMutation.mutate({ id: modalTarget.id, data });
+              }
+            }}
           />
         )}
       </div>

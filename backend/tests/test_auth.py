@@ -109,6 +109,37 @@ def test_logout_clears_the_session(client):
     assert client.get("/api/auth/me").status_code == 401
 
 
+def test_default_login_sets_a_session_cookie(client):
+    client.post(
+        "/api/auth/register",
+        json={"name": "Climber", "email": "session@example.com", "password": "Str0ng!Pass"},
+    )
+    response = client.post(
+        "/api/auth/login", json={"email": "session@example.com", "password": "Str0ng!Pass"}
+    )
+    assert response.status_code == 200
+    set_cookie = response.headers.get("set-cookie")
+    assert set_cookie is not None
+    # No Max-Age/Expires: a true session cookie, cleared when the browser
+    # closes, rather than persisting across days by default.
+    assert "Max-Age" not in set_cookie
+
+
+def test_remember_me_sets_a_persistent_cookie(client):
+    client.post(
+        "/api/auth/register",
+        json={"name": "Climber", "email": "remember@example.com", "password": "Str0ng!Pass"},
+    )
+    response = client.post(
+        "/api/auth/login",
+        json={"email": "remember@example.com", "password": "Str0ng!Pass", "remember_me": True},
+    )
+    assert response.status_code == 200
+    set_cookie = response.headers.get("set-cookie")
+    assert set_cookie is not None
+    assert "Max-Age" in set_cookie
+
+
 def test_token_for_a_deleted_user_is_rejected(client, db_session_factory):
     # Covers get_current_user's "user not found" branch: the JWT is still
     # valid, but the account it points at no longer exists (e.g. deleted

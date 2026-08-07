@@ -107,6 +107,57 @@ def test_owner_can_delete_own_route(client):
     assert routes == []
 
 
+def test_owner_can_update_own_route(client):
+    register_and_login(client, email="editor@example.com")
+    created = client.post(
+        "/api/routes",
+        json={"route_name": "Original name", "grade_index": 10, "climb_date": "2026-01-01"},
+    ).json()
+
+    update_response = client.put(
+        f"/api/routes/{created['id']}",
+        json={"route_name": "Updated name", "grade_index": 40, "climb_date": "2026-02-01", "comment": "edited"},
+    )
+    assert update_response.status_code == 200
+    body = update_response.json()
+    assert body["route_name"] == "Updated name"
+    assert body["grade_index"] == 40
+    assert body["comment"] == "edited"
+
+    routes = client.get("/api/routes").json()
+    assert len(routes) == 1
+    assert routes[0]["route_name"] == "Updated name"
+
+
+def test_update_route_ownership_is_enforced(client):
+    register_and_login(client, email="owner3@example.com")
+    created = client.post(
+        "/api/routes",
+        json={"route_name": "Owner's route", "grade_index": 20, "climb_date": "2026-01-01"},
+    ).json()
+    route_id = created["id"]
+
+    register_and_login(client, email="intruder2@example.com")
+    response = client.put(
+        f"/api/routes/{route_id}",
+        json={"route_name": "Hijacked", "grade_index": 1, "climb_date": "2026-01-01"},
+    )
+    assert response.status_code == 404
+
+    register_and_login(client, email="owner3@example.com")
+    routes = client.get("/api/routes").json()
+    assert routes[0]["route_name"] == "Owner's route"
+
+
+def test_update_nonexistent_route_404(client):
+    register_and_login(client, email="ghost-editor@example.com")
+    response = client.put(
+        "/api/routes/999999",
+        json={"route_name": "Nope", "grade_index": 1, "climb_date": "2026-01-01"},
+    )
+    assert response.status_code == 404
+
+
 def test_grade_index_out_of_range_rejected(client):
     register_and_login(client, email="grade@example.com")
     response = client.post(
