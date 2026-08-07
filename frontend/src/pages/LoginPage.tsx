@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { ApiError } from '../api/client';
 import logo from '../assets/photos/logo.gif';
 import loginImage from '../assets/photos/log_in.jpg';
@@ -8,6 +9,7 @@ import '../styles/general_form_page.css';
 
 export function LoginPage() {
   const { login } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -23,7 +25,7 @@ export function LoginPage() {
       await login(email, password, rememberMe);
       navigate('/journal');
     } catch (err) {
-      setError(err instanceof ApiError ? err.message : 'Something went wrong');
+      setError(err instanceof ApiError ? err.message : t('auth_somethingWentWrong'));
     } finally {
       setIsSubmitting(false);
     }
@@ -39,14 +41,14 @@ export function LoginPage() {
 
       <div className="form-container">
         <div className="form-body">
-          <h1>Sign in</h1>
+          <h1>{t('auth_signInTitle')}</h1>
           <div className="first-p">
-            <p>Please fill in your details to access your account</p>
+            <p>{t('auth_signInSubtitle')}</p>
           </div>
 
           <form className="auth-form" onSubmit={handleSubmit}>
             <div className="field">
-              <label htmlFor="email">E-mail</label>
+              <label htmlFor="email">{t('auth_email')}</label>
               <input
                 className="box"
                 id="email"
@@ -58,7 +60,7 @@ export function LoginPage() {
             </div>
 
             <div className="field">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">{t('auth_password')}</label>
               <input
                 className="box"
                 id="password"
@@ -77,7 +79,7 @@ export function LoginPage() {
                   checked={rememberMe}
                   onChange={(e) => setRememberMe(e.target.checked)}
                 />
-                Keep me logged in
+                {t('auth_keepLoggedIn')}
               </label>
             </div>
 
@@ -91,13 +93,13 @@ export function LoginPage() {
 
             <div className="submit-btn-container">
               <button className="submit-btn" type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Logging in…' : 'Login'}
+                {isSubmitting ? t('auth_loggingIn') : t('auth_loginButton')}
               </button>
             </div>
           </form>
 
           <h2 className="second-p">
-            Don't have account? <Link to="/register">Create new account</Link>
+            {t('auth_noAccount')} <Link to="/register">{t('auth_createNewAccount')}</Link>
           </h2>
         </div>
       </div>

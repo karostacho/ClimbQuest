@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { ROCK_SCALE_LISTS, findRockGradeIndex, formatRockGrade, type RockScale } from '../data/grades';
 import type { Route } from '../api/routes';
+import { useLanguage } from '../context/LanguageContext';
 
 interface AddRouteModalProps {
   isSubmitting: boolean;
@@ -34,6 +35,7 @@ function getLocalDateString(): string {
 }
 
 export function AddRouteModal({ isSubmitting, editingRoute, displayScale, onClose, onSubmit }: AddRouteModalProps) {
+  const { t } = useLanguage();
   const isEditing = !!editingRoute;
   const today = getLocalDateString();
   const [routeName, setRouteName] = useState(editingRoute?.route_name ?? '');
@@ -55,12 +57,12 @@ export function AddRouteModal({ isSubmitting, editingRoute, displayScale, onClos
     if (isSubmitting) return;
 
     if (!selectedScale || !selectedGrade) {
-      setError('Grade must be selected');
+      setError(t('modal_gradeRequired'));
       return;
     }
     const gradeIndex = findRockGradeIndex(selectedScale, selectedGrade);
     if (gradeIndex === undefined) {
-      setError('Grade must be selected');
+      setError(t('modal_gradeRequired'));
       return;
     }
 
@@ -77,16 +79,16 @@ export function AddRouteModal({ isSubmitting, editingRoute, displayScale, onClos
         </div>
 
         <form className="modal-add-route-form" onSubmit={handleSubmit}>
-          <h2>{isEditing ? 'Edit route' : 'Add new route to your journal'}</h2>
+          <h2>{isEditing ? t('modal_editTitle') : t('modal_addTitle')}</h2>
           <div className="modal-add-form-first-line">
             <div className="field">
               <label className="fields-name" htmlFor="route_name">
-                Route name:
+                {t('modal_routeName')}
               </label>
               <input
                 className="field-input"
                 type="text"
-                placeholder="Eg. Perfecto Mundo"
+                placeholder={t('modal_routeNamePlaceholder')}
                 id="route_name"
                 value={routeName}
                 onChange={(e) => setRouteName(e.target.value)}
@@ -95,7 +97,7 @@ export function AddRouteModal({ isSubmitting, editingRoute, displayScale, onClos
             </div>
             <div className="field">
               <label className="fields-name" htmlFor="date">
-                Date:
+                {t('modal_date')}
               </label>
               <input
                 className="field-input"
@@ -113,20 +115,20 @@ export function AddRouteModal({ isSubmitting, editingRoute, displayScale, onClos
             <div className="comment">
               <div className="field-comment">
                 <label className="fields-name" htmlFor="comment">
-                  Comment:
+                  {t('modal_comment')}
                 </label>
                 <input
                   className="field-input"
                   id="comment"
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
-                  placeholder="Eg. Rather soft for the grade"
+                  placeholder={t('modal_commentPlaceholder')}
                 />
               </div>
             </div>
           </div>
 
-          <p>Choose the scale of your route</p>
+          <p>{t('modal_chooseScale')}</p>
 
           <div className="modal-dropdown-section">
             {(Object.keys(ROCK_SCALE_LISTS) as RockScale[]).map((scale) => (
@@ -158,7 +160,13 @@ export function AddRouteModal({ isSubmitting, editingRoute, displayScale, onClos
 
           <div className="modal-submit-btn">
             <button type="submit" id="submitBtn" disabled={isSubmitting}>
-              {isSubmitting ? (isEditing ? 'Saving…' : 'Submitting…') : isEditing ? 'Save changes' : 'Submit'}
+              {isSubmitting
+                ? isEditing
+                  ? t('modal_saving')
+                  : t('modal_submitting')
+                : isEditing
+                  ? t('modal_saveChanges')
+                  : t('modal_submit')}
             </button>
           </div>
         </form>

@@ -179,15 +179,34 @@ input {
 #kurtyka,
 #uiaa,
 #usa,
-#british,
-#v_scale,
-#font_scale {
+#british {
     width: 90px;
     height: 36px;
     border-radius: 8px;
-    border-color: rgba(0, 0, 0, 0.1);
-    padding: 8px, 16px, 8px, 16px;
-    border: 1px, 1px, 1px, 1px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 8px 12px;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#french:hover,
+#kurtyka:hover,
+#uiaa:hover,
+#usa:hover,
+#british:hover {
+    background-color: rgba(245, 244, 251, 1);
+    border-color: rgba(98, 77, 227, 0.4);
+}
+
+#french:focus-visible,
+#kurtyka:focus-visible,
+#uiaa:focus-visible,
+#usa:focus-visible,
+#british:focus-visible {
+    outline: none;
+    border-color: rgba(98, 77, 227, 1);
+    box-shadow: 0 0 0 3px rgba(98, 77, 227, 0.15);
 }
 
 .comment-and-dropdowns {
@@ -245,9 +264,21 @@ input {
     width: 102px;
     height: 40px;
     border-radius: 8px;
-    border-color: rgba(208, 213, 221, 1);
-    padding: 10px, 12px, 10px, 16px;
-    border: 1px, 1px, 1px, 1px;
+    border: 1px solid rgba(208, 213, 221, 1);
+    padding: 8px 12px;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#grade-filter:hover {
+    border-color: rgba(98, 77, 227, 0.4);
+}
+
+#grade-filter:focus-visible {
+    outline: none;
+    border-color: rgba(98, 77, 227, 1);
+    box-shadow: 0 0 0 3px rgba(98, 77, 227, 0.15);
 }
 
 .grade-filter label {

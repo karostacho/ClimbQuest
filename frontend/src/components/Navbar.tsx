@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
+import { LanguageToggle } from './LanguageToggle';
 import logo from '../assets/photos/logo.gif';
 import '../styles/navbar.css';
 
 export function Navbar() {
   const { user, logout } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const location = useLocation();
   const [showLoggedOutNotice, setShowLoggedOutNotice] = useState(false);
@@ -35,22 +38,19 @@ export function Navbar() {
                 >
                   <i className="fa-solid fa-xmark" />
                 </span>
-                <h1>You are not logged in</h1>
+                <h1>{t('nav_notLoggedInTitle')}</h1>
                 <div className="text-container">
-                  <p>
-                    Log in to your profile or sign up to add new routes and boulders to your
-                    climbing journal, and keep an eye on your progress!
-                  </p>
+                  <p>{t('nav_notLoggedInBody')}</p>
                 </div>
                 <div className="buttons">
                   <div className="sign-up-button">
                     <Link className="sign_up" to="/register">
-                      Sign up
+                      {t('nav_signUp')}
                     </Link>
                   </div>
                   <div className="log-in-button">
                     <Link className="log_in" to="/login">
-                      Have account? Log in
+                      {t('nav_haveAccountLogin')}
                     </Link>
                   </div>
                 </div>
@@ -60,7 +60,7 @@ export function Navbar() {
 
           <li className={location.pathname === '/' ? 'grade-converter-tab active-tab' : 'grade-converter-tab'}>
             <Link className="grade-converter-tab" to="/">
-              Grade converter
+              {t('nav_gradeConverter')}
             </Link>
           </li>
 
@@ -68,12 +68,12 @@ export function Navbar() {
             <>
               <li className={location.pathname === '/journal' ? 'journal-dropdown active-tab' : 'journal-dropdown'}>
                 <Link className="journal-tab" to="/journal">
-                  Journal
+                  {t('nav_journal')}
                 </Link>
               </li>
               <li>
                 <a className="login" href="#logout" onClick={(e) => { e.preventDefault(); handleLogout(); }}>
-                  Log out
+                  {t('nav_logout')}
                 </a>
               </li>
             </>
@@ -83,18 +83,20 @@ export function Navbar() {
                 <button
                   className="journal-tab-inactive"
                   onClick={() => setShowLoggedOutNotice(true)}
-                  title="Log in to access your journal"
+                  title={t('nav_loginRequiredTooltip')}
                 >
-                  <i className="fa-solid fa-lock" /> Journal
+                  <i className="fa-solid fa-lock" /> {t('nav_journal')}
                 </button>
               </li>
               <li>
                 <Link className="login" to="/login">
-                  Log in
+                  {t('nav_login')}
                 </Link>
               </li>
             </>
           )}
+
+          <LanguageToggle />
         </div>
       </ul>
     </div>

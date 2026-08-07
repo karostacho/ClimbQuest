@@ -81,6 +81,16 @@
     font-size: 0.85em;
 }
 
+.menu-mobile .language-toggle {
+    justify-content: flex-end;
+    width: 100%;
+    margin: 0;
+}
+
+.menu-mobile .language-option {
+    font-size: 16px;
+}
+
 @media (max-width: 1025px) {
     .menu-mobile {
         display: none;

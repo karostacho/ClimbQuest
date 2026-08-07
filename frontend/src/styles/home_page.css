@@ -31,13 +31,12 @@ body {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: center;
+	gap: 0.5rem 1rem;
 }
 
 .grade-dropdowns {
 	display: inline-block;
 	padding: 5px 25px;
-	margin-left: 1.5rem;
-	margin-right: 1.5rem;
 }
 
 .grade-dropdowns label {
@@ -57,24 +56,47 @@ body {
 	height: 36px;
 }
 
-/*Dropdowns fields*/
-
+/* Dropdown fields - selector list must match the actual rendered ids
+   (RockScale/BoulderScale keys: french/kurtyka/uiaa/usa/british/vScale/
+   fontScale). This previously listed #v_scale/#font_scale, which never
+   matched anything, so the bouldering dropdowns silently got none of this
+   styling while the lead-climbing ones did. */
 #french,
 #kurtyka,
 #uiaa,
 #usa,
 #british,
-#v_scale,
-#font_scale {
+#vScale,
+#fontScale {
 	border-radius: 8px;
-	border-color: rgba(0, 0, 0, 0.1);
-	padding: 8px, 16px, 8px, 16px;
-	border: 1px, 1px, 1px, 1px;
-	gap: 8px;
+	border: 1px solid rgba(0, 0, 0, 0.1);
+	padding: 8px 12px;
+	background-color: white;
+	cursor: pointer;
+	transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
 }
 
-.grade-dropdowns:hover select {
+#french:hover,
+#kurtyka:hover,
+#uiaa:hover,
+#usa:hover,
+#british:hover,
+#vScale:hover,
+#fontScale:hover {
 	background-color: rgba(245, 244, 251, 1);
+	border-color: rgba(98, 77, 227, 0.4);
+}
+
+#french:focus-visible,
+#kurtyka:focus-visible,
+#uiaa:focus-visible,
+#usa:focus-visible,
+#british:focus-visible,
+#vScale:focus-visible,
+#fontScale:focus-visible {
+	outline: none;
+	border-color: rgba(98, 77, 227, 1);
+	box-shadow: 0 0 0 3px rgba(98, 77, 227, 0.15);
 }
 
 .container {

@@ -1,7 +1,9 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
+import type { ComponentProps } from 'react';
 import { AddRouteModal } from './AddRouteModal';
+import { LanguageProvider } from '../context/LanguageContext';
 import type { Route } from '../api/routes';
 
 const EXISTING_ROUTE: Route = {
@@ -13,11 +15,19 @@ const EXISTING_ROUTE: Route = {
   created_at: '2026-01-01T00:00:00Z',
 };
 
+function renderModal(props: ComponentProps<typeof AddRouteModal>) {
+  return render(
+    <LanguageProvider>
+      <AddRouteModal {...props} />
+    </LanguageProvider>,
+  );
+}
+
 describe('AddRouteModal', () => {
   it('blocks submit and shows an error when no grade is selected', async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
-    render(<AddRouteModal isSubmitting={false} displayScale="french" onClose={vi.fn()} onSubmit={onSubmit} />);
+    renderModal({ isSubmitting: false, displayScale: 'french', onClose: vi.fn(), onSubmit });
 
     await user.type(screen.getByLabelText('Route name:'), 'Perfecto Mundo');
     await user.click(screen.getByRole('button', { name: 'Submit' }));
@@ -29,7 +39,7 @@ describe('AddRouteModal', () => {
   it('submits the resolved grade_index once a grade is picked', async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
-    render(<AddRouteModal isSubmitting={false} displayScale="french" onClose={vi.fn()} onSubmit={onSubmit} />);
+    renderModal({ isSubmitting: false, displayScale: 'french', onClose: vi.fn(), onSubmit });
 
     await user.type(screen.getByLabelText('Route name:'), 'Perfecto Mundo');
     await user.selectOptions(screen.getByLabelText('French'), '1-');
@@ -42,7 +52,7 @@ describe('AddRouteModal', () => {
   });
 
   it('disables the submit button and shows a submitting label while isSubmitting is true', () => {
-    render(<AddRouteModal isSubmitting displayScale="french" onClose={vi.fn()} onSubmit={vi.fn()} />);
+    renderModal({ isSubmitting: true, displayScale: 'french', onClose: vi.fn(), onSubmit: vi.fn() });
 
     const button = screen.getByRole('button', { name: 'Submitting…' });
     expect(button).toBeDisabled();
@@ -51,7 +61,7 @@ describe('AddRouteModal', () => {
   it('ignores a submit attempt while already submitting', async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
-    render(<AddRouteModal isSubmitting displayScale="french" onClose={vi.fn()} onSubmit={onSubmit} />);
+    renderModal({ isSubmitting: true, displayScale: 'french', onClose: vi.fn(), onSubmit });
 
     // The button is disabled, so dispatch the form's submit event directly
     // to exercise the handleSubmit early-return guard itself.
@@ -63,15 +73,13 @@ describe('AddRouteModal', () => {
   });
 
   it('pre-fills fields and switches to "Save changes" when editing an existing route', () => {
-    render(
-      <AddRouteModal
-        isSubmitting={false}
-        editingRoute={EXISTING_ROUTE}
-        displayScale="french"
-        onClose={vi.fn()}
-        onSubmit={vi.fn()}
-      />,
-    );
+    renderModal({
+      isSubmitting: false,
+      editingRoute: EXISTING_ROUTE,
+      displayScale: 'french',
+      onClose: vi.fn(),
+      onSubmit: vi.fn(),
+    });
 
     expect(screen.getByLabelText('Route name:')).toHaveValue('Perfecto Mundo');
     expect(screen.getByLabelText('Date:')).toHaveValue('2026-01-01');
@@ -84,15 +92,13 @@ describe('AddRouteModal', () => {
   it('submits the edited values with the existing grade already resolved', async () => {
     const user = userEvent.setup();
     const onSubmit = vi.fn();
-    render(
-      <AddRouteModal
-        isSubmitting={false}
-        editingRoute={EXISTING_ROUTE}
-        displayScale="french"
-        onClose={vi.fn()}
-        onSubmit={onSubmit}
-      />,
-    );
+    renderModal({
+      isSubmitting: false,
+      editingRoute: EXISTING_ROUTE,
+      displayScale: 'french',
+      onClose: vi.fn(),
+      onSubmit,
+    });
 
     const nameInput = screen.getByLabelText('Route name:');
     await user.clear(nameInput);

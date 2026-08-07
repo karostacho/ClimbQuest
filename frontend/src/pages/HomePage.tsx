@@ -11,6 +11,7 @@ import {
   type BoulderScale,
   type RockScale,
 } from '../data/grades';
+import { useLanguage } from '../context/LanguageContext';
 import background from '../assets/photos/background_image.jpg';
 import '../styles/home_page.css';
 import '../styles/graphic_section.css';
@@ -19,6 +20,7 @@ const ROCK_SCALE_COLUMN_INDEX: Record<RockScale, number> = { usa: 1, french: 2, 
 const BOULDER_SCALE_COLUMN_INDEX: Record<BoulderScale, number> = { vScale: 1, fontScale: 2 };
 
 export function HomePage() {
+  const { t } = useLanguage();
   const [rockIndex, setRockIndex] = useState(DEFAULT_ROCK_INDEX);
   const [boulderIndex, setBoulderIndex] = useState(DEFAULT_BOULDER_INDEX);
 
@@ -40,13 +42,13 @@ export function HomePage() {
       <div className="graphic-section">
         <img src={background} alt="" />
         <div className="title">
-          <h1>Climbing grade converter</h1>
+          <h1>{t('home_title')}</h1>
         </div>
       </div>
 
       <div className="climbing-drop">
         <div className="titles">
-          <h1>Lead Climbing</h1>
+          <h1>{t('home_leadClimbing')}</h1>
         </div>
 
         <div className="grade-dropdowns-wrapper">

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { ROCK_SCALE_LISTS, type RockScale } from '../data/grades';
 import {
   createRoute,
@@ -32,6 +33,7 @@ type ModalTarget = 'closed' | 'new' | Route;
 
 export function JournalPage() {
   const { user } = useAuth();
+  const { t } = useLanguage();
   const queryClient = useQueryClient();
   const [scale, setScale] = useState<RockScale>('french');
   const [sortBy, setSortBy] = useState<SortBy>('date');
@@ -58,7 +60,7 @@ export function JournalPage() {
       queryClient.invalidateQueries({ queryKey: ['routes', user?.id] });
       setModalTarget('closed');
     },
-    onError: () => setActionError('Could not add that route. Please try again.'),
+    onError: () => setActionError(t('journal_addError')),
   });
 
   const updateMutation = useMutation({
@@ -68,7 +70,7 @@ export function JournalPage() {
       queryClient.invalidateQueries({ queryKey: ['routes', user?.id] });
       setModalTarget('closed');
     },
-    onError: () => setActionError('Could not save your changes. Please try again.'),
+    onError: () => setActionError(t('journal_saveError')),
   });
 
   const deleteMutation = useMutation({
@@ -77,7 +79,7 @@ export function JournalPage() {
       setActionError(null);
       queryClient.invalidateQueries({ queryKey: ['routes', user?.id] });
     },
-    onError: () => setActionError('Could not delete that route. Please try again.'),
+    onError: () => setActionError(t('journal_deleteError')),
   });
 
   function toggleOrder(column: SortBy) {
@@ -94,20 +96,20 @@ export function JournalPage() {
       <div className="graphic-section">
         <img src={background} alt="" />
         <div className="title">
-          <h1>Lead climbing journal</h1>
+          <h1>{t('journal_title')}</h1>
         </div>
       </div>
 
       <div className="button-route-section">
         <button className="add-route-btn" onClick={() => setModalTarget('new')}>
-          Add new route <i className="fa-solid fa-plus" />
+          {t('journal_addNewRoute')} <i className="fa-solid fa-plus" />
         </button>
       </div>
 
       <div className="routes-section">
         <div className="table-section">
           <div className="grade-filter">
-            <label htmlFor="grade-filter">Grade Scale:</label>
+            <label htmlFor="grade-filter">{t('journal_gradeScale')}</label>
             <br />
             <select id="grade-filter" value={scale} onChange={(e) => setScale(e.target.value as RockScale)}>
               {(Object.keys(ROCK_SCALE_LISTS) as RockScale[]).map((option) => (
@@ -127,9 +129,9 @@ export function JournalPage() {
           )}
 
           {isPending ? (
-            <p>Loading your routes…</p>
+            <p>{t('journal_loading')}</p>
           ) : isError ? (
-            <p role="alert">Could not load your routes. Please refresh the page.</p>
+            <p role="alert">{t('journal_loadError')}</p>
           ) : (
             <RouteTable
               routes={routes}

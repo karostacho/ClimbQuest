@@ -1,5 +1,6 @@
 import { formatRockGrade, type RockScale } from '../data/grades';
 import type { Route } from '../api/routes';
+import { useLanguage } from '../context/LanguageContext';
 
 interface RouteTableProps {
   routes: Route[];
@@ -11,8 +12,10 @@ interface RouteTableProps {
 }
 
 export function RouteTable({ routes, scale, onToggleDateOrder, onToggleGradeOrder, onEdit, onDelete }: RouteTableProps) {
+  const { t } = useLanguage();
+
   function handleDelete(id: number) {
-    if (window.confirm('Are you sure you want to delete this route?')) {
+    if (window.confirm(t('journal_deleteConfirm'))) {
       onDelete(id);
     }
   }
@@ -22,17 +25,17 @@ export function RouteTable({ routes, scale, onToggleDateOrder, onToggleGradeOrde
       <thead>
         <tr className="headers">
           <th>#</th>
-          <th>Name</th>
+          <th>{t('journal_columnName')}</th>
           <th>
             <a className="fa-solid fa-sort" href="#sort-grade" onClick={(e) => { e.preventDefault(); onToggleGradeOrder(); }} />
-            <a> Grade</a>
+            <a> {t('journal_columnGrade')}</a>
           </th>
           <th>
             <a className="fa-solid fa-sort" href="#sort-date" onClick={(e) => { e.preventDefault(); onToggleDateOrder(); }} />
-            <a> Date</a>
+            <a> {t('journal_columnDate')}</a>
           </th>
-          <th>Comment</th>
-          <th>Action</th>
+          <th>{t('journal_columnComment')}</th>
+          <th>{t('journal_columnAction')}</th>
         </tr>
       </thead>
       <tbody>
@@ -50,13 +53,13 @@ export function RouteTable({ routes, scale, onToggleDateOrder, onToggleGradeOrde
                     href="#edit"
                     onClick={(e) => { e.preventDefault(); onEdit(route); }}
                     className="icon-btn fa-regular fa-pen-to-square"
-                    title="Edit route"
+                    title={t('journal_editRouteTooltip')}
                   />
                   <a
                     href="#delete"
                     onClick={(e) => { e.preventDefault(); handleDelete(route.id); }}
                     className="icon-btn fa-regular fa-trash-can"
-                    title="Delete route"
+                    title={t('journal_deleteRouteTooltip')}
                   />
                 </div>
               </div>

@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useLanguage } from '../context/LanguageContext';
 import { ApiError } from '../api/client';
 import logo from '../assets/photos/logo.gif';
 import signUpImage from '../assets/photos/sign_up.jpg';
@@ -11,11 +12,10 @@ const EMAIL_REGEX = /^[^@]+@[^@]+\.[^@]+$/;
 // counts as a special character) - a narrower client-side whitelist here
 // previously rejected passwords the server would have accepted.
 const PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9]).{8,}$/;
-const PASSWORD_HINT =
-  'Password must be at least 8 characters and must contain at least: 1 lowercase letter, 1 uppercase letter, 1 numeric character, and 1 special character';
 
 export function RegisterPage() {
   const { register } = useAuth();
+  const { t } = useLanguage();
   const navigate = useNavigate();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -32,9 +32,9 @@ export function RegisterPage() {
     const isPasswordValid = PASSWORD_REGEX.test(password);
     const isMatch = password === repeatPassword;
 
-    setEmailError(isEmailValid ? null : 'Invalid e-mail');
-    setPasswordError(isPasswordValid ? null : PASSWORD_HINT);
-    setMismatchError(isMatch ? null : "Passwords don't match");
+    setEmailError(isEmailValid ? null : t('auth_invalidEmail'));
+    setPasswordError(isPasswordValid ? null : t('auth_passwordHint'));
+    setMismatchError(isMatch ? null : t('auth_passwordsDontMatch'));
 
     return isEmailValid && isPasswordValid && isMatch;
   }
@@ -49,7 +49,7 @@ export function RegisterPage() {
       await register(name, email, password);
       navigate('/register/success');
     } catch (err) {
-      setServerError(err instanceof ApiError ? err.message : 'Something went wrong');
+      setServerError(err instanceof ApiError ? err.message : t('auth_somethingWentWrong'));
     } finally {
       setIsSubmitting(false);
     }
@@ -65,19 +65,19 @@ export function RegisterPage() {
 
       <div className="form-container">
         <div className="form-body">
-          <h1>Sign up</h1>
+          <h1>{t('auth_signUpTitle')}</h1>
           <div className="first-p">
-            <p>Please fill in your details to create your account</p>
+            <p>{t('auth_signUpSubtitle')}</p>
           </div>
 
           <form className="auth-form" onSubmit={handleSubmit}>
             <div className="field">
-              <label htmlFor="name">Name</label>
+              <label htmlFor="name">{t('auth_name')}</label>
               <input className="box" type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} required />
             </div>
 
             <div className="field">
-              <label htmlFor="email">E-mail</label>
+              <label htmlFor="email">{t('auth_email')}</label>
               <input
                 className="box"
                 type="text"
@@ -90,7 +90,7 @@ export function RegisterPage() {
             </div>
 
             <div className="field">
-              <label htmlFor="password">Password</label>
+              <label htmlFor="password">{t('auth_password')}</label>
               <input
                 className="box"
                 type="password"
@@ -103,7 +103,7 @@ export function RegisterPage() {
             </div>
 
             <div className="field">
-              <label htmlFor="repeat_password">Repeat Password</label>
+              <label htmlFor="repeat_password">{t('auth_repeatPassword')}</label>
               <input
                 className="box"
                 type="password"
@@ -125,13 +125,13 @@ export function RegisterPage() {
 
             <div className="submit-btn-container">
               <button className="submit-btn" type="submit" disabled={isSubmitting}>
-                {isSubmitting ? 'Signing up…' : 'Sign up'}
+                {isSubmitting ? t('auth_signingUp') : t('auth_signUpButton')}
               </button>
             </div>
           </form>
 
           <h2 className="second-p">
-            Already have account? <Link to="/login">Log in</Link>
+            {t('auth_haveAccount')} <Link to="/login">{t('auth_logIn')}</Link>
           </h2>
         </div>
       </div>
