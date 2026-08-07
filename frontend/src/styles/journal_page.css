@@ -348,6 +348,20 @@ th {
         top: 165px;
     }
 
+    /* .add-route-btn is absolutely positioned and was calibrated to float
+       56px below .routes-section's top edge (256px vs. 200px on desktop) -
+       but only .routes-section got a mobile override, so the button's
+       top stayed at 256px while the card moved up to 165px, landing the
+       button well inside the table instead of just above it. Keep the
+       same 56px relationship, and size it down for narrow screens. */
+    .add-route-btn {
+        top: 221px;
+        width: auto;
+        max-width: 80vw;
+        padding: 10px 20px;
+        font-size: 16px;
+    }
+
     .titles h1 {
         font-size: 24px;
         line-height: 36px;
