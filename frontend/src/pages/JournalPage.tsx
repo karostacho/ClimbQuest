@@ -142,51 +142,51 @@ export function JournalPage() {
       </div>
 
       <div className="routes-section">
-        <div className="table-section">
-          <div className="table-filters">
-            <div className="grade-filter">
-              <label htmlFor="grade-filter">{t('journal_gradeScale')}</label>
-              <select id="grade-filter" value={scale} onChange={(e) => setScale(e.target.value as RockScale)}>
-                {(Object.keys(ROCK_SCALE_LISTS) as RockScale[]).map((option) => (
-                  <option key={option} value={option}>
-                    {SCALE_LABELS[option]}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="date-filter">
-              <div className="date-filter-field">
-                <label htmlFor="filter-from">{t('journal_filterFrom')}</label>
-                <input
-                  id="filter-from"
-                  type="date"
-                  value={fromDate}
-                  max={toDate || undefined}
-                  onChange={(e) => setFromDate(e.target.value)}
-                />
-              </div>
-              <div className="date-filter-field">
-                <label htmlFor="filter-to">{t('journal_filterTo')}</label>
-                <input
-                  id="filter-to"
-                  type="date"
-                  value={toDate}
-                  min={fromDate || undefined}
-                  onChange={(e) => setToDate(e.target.value)}
-                />
-              </div>
-              <button
-                type="button"
-                className={hasActiveDateFilter ? 'clear-filters-btn' : 'clear-filters-btn is-hidden'}
-                onClick={clearDateFilters}
-                disabled={!hasActiveDateFilter}
-              >
-                {t('journal_clearFilters')}
-              </button>
-            </div>
+        <div className="table-filters">
+          <div className="grade-filter">
+            <label htmlFor="grade-filter">{t('journal_gradeScale')}</label>
+            <select id="grade-filter" value={scale} onChange={(e) => setScale(e.target.value as RockScale)}>
+              {(Object.keys(ROCK_SCALE_LISTS) as RockScale[]).map((option) => (
+                <option key={option} value={option}>
+                  {SCALE_LABELS[option]}
+                </option>
+              ))}
+            </select>
           </div>
 
+          <div className="date-filter">
+            <div className="date-filter-field">
+              <label htmlFor="filter-from">{t('journal_filterFrom')}</label>
+              <input
+                id="filter-from"
+                type="date"
+                value={fromDate}
+                max={toDate || undefined}
+                onChange={(e) => setFromDate(e.target.value)}
+              />
+            </div>
+            <div className="date-filter-field">
+              <label htmlFor="filter-to">{t('journal_filterTo')}</label>
+              <input
+                id="filter-to"
+                type="date"
+                value={toDate}
+                min={fromDate || undefined}
+                onChange={(e) => setToDate(e.target.value)}
+              />
+            </div>
+            <button
+              type="button"
+              className={hasActiveDateFilter ? 'clear-filters-btn' : 'clear-filters-btn is-hidden'}
+              onClick={clearDateFilters}
+              disabled={!hasActiveDateFilter}
+            >
+              {t('journal_clearFilters')}
+            </button>
+          </div>
+        </div>
+
+        <div className="table-section">
           {actionError && (
             <div className="flash-container">
               <div className="flash-message error" role="alert">
