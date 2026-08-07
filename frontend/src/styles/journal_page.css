@@ -175,39 +175,10 @@ input {
 	margin-left: 1.5rem;
 	margin-right: 1.5rem;
 }
-#french,
-#kurtyka,
-#uiaa,
-#usa,
-#british {
-    width: 90px;
-    height: 36px;
-    border-radius: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    padding: 8px 12px;
-    background-color: white;
-    cursor: pointer;
-    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-#french:hover,
-#kurtyka:hover,
-#uiaa:hover,
-#usa:hover,
-#british:hover {
-    background-color: rgba(245, 244, 251, 1);
-    border-color: rgba(98, 77, 227, 0.4);
-}
-
-#french:focus-visible,
-#kurtyka:focus-visible,
-#uiaa:focus-visible,
-#usa:focus-visible,
-#british:focus-visible {
-    outline: none;
-    border-color: rgba(98, 77, 227, 1);
-    box-shadow: 0 0 0 3px rgba(98, 77, 227, 0.15);
-}
+/* Trigger button styling lives in dropdown.css (shared with HomePage) -
+   these grade pickers are the custom Dropdown component, not native
+   <select>, so the options panel always opens below and stays capped in
+   height instead of the browser's native popup taking over the screen. */
 
 .comment-and-dropdowns {
     display: flex;
@@ -229,13 +200,6 @@ input {
     line-height: 20px;
 }
 
-.grade-dropdowns select {
-    font-family: 'Fira Sans', sans-serif;
-    font-size: 16px;
-    line-height: 20px;
-    font-weight: 500;
-}
-
 /* Submit route button*/
 
 .modal-submit-btn button{
@@ -254,10 +218,90 @@ input {
 
 /* Table */
 
-.grade-filter {
-    float: right;
+.table-filters {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 1.5rem;
     margin-right: 15%;
     margin-bottom: 1%;
+}
+
+.grade-filter {
+    text-align: left;
+}
+
+.date-filter {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.75rem;
+}
+
+.date-filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    text-align: left;
+}
+
+.date-filter-field label {
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+}
+
+.date-filter-field input[type="date"] {
+    height: 38px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    border: 1px solid rgba(208, 213, 221, 1);
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.date-filter-field input[type="date"]:hover {
+    border-color: rgba(98, 77, 227, 0.4);
+}
+
+.date-filter-field input[type="date"]:focus-visible {
+    outline: none;
+    border-color: rgba(98, 77, 227, 1);
+    box-shadow: 0 0 0 3px rgba(98, 77, 227, 0.15);
+}
+
+.clear-filters-btn {
+    height: 38px;
+    padding: 0 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(208, 213, 221, 1);
+    background-color: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: rgba(98, 77, 227, 1);
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.clear-filters-btn:hover {
+    background-color: rgba(151, 71, 255, 0.07);
+    border-color: rgba(98, 77, 227, 0.4);
+}
+
+@media (max-width: 768px) {
+    .table-filters {
+        justify-content: center;
+        margin-right: 0;
+        padding: 0 5%;
+    }
+
+    .date-filter {
+        justify-content: center;
+    }
 }
 
 #grade-filter {
@@ -358,9 +402,41 @@ th {
     background-color: rgba(255, 255, 255, 1);
 }
 
-.fa-sort {
+.fa-sort,
+.fa-sort-up,
+.fa-sort-down {
     color: rgba(158, 158, 158, 1);
     text-decoration: none;
+}
+
+.sort-header {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    border: none;
+    background: none;
+    padding: 4px 6px;
+    margin: 0;
+    border-radius: 6px;
+    font: inherit;
+    font-weight: inherit;
+    color: inherit;
+    cursor: pointer;
+    transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sort-header:hover {
+    background-color: rgba(151, 71, 255, 0.07);
+    color: rgba(98, 77, 227, 1);
+}
+
+.sort-header.active {
+    color: rgba(98, 77, 227, 1);
+}
+
+.sort-header.active .fa-sort-up,
+.sort-header.active .fa-sort-down {
+    color: rgba(98, 77, 227, 1);
 }
 
 .fa-trash-can {

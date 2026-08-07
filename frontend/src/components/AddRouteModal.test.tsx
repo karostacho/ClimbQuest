@@ -42,7 +42,8 @@ describe('AddRouteModal', () => {
     renderModal({ isSubmitting: false, displayScale: 'french', onClose: vi.fn(), onSubmit });
 
     await user.type(screen.getByLabelText('Route name:'), 'Perfecto Mundo');
-    await user.selectOptions(screen.getByLabelText('French'), '1-');
+    await user.click(screen.getByLabelText('French'));
+    await user.click(screen.getByRole('option', { name: '1-' }));
     await user.click(screen.getByRole('button', { name: 'Submit' }));
 
     expect(onSubmit).toHaveBeenCalledTimes(1);
@@ -84,7 +85,7 @@ describe('AddRouteModal', () => {
     expect(screen.getByLabelText('Route name:')).toHaveValue('Perfecto Mundo');
     expect(screen.getByLabelText('Date:')).toHaveValue('2026-01-01');
     expect(screen.getByLabelText('Comment:')).toHaveValue('Soft for the grade');
-    expect(screen.getByLabelText('French')).toHaveValue('1-');
+    expect(screen.getByLabelText('French')).toHaveTextContent('1-');
     expect(screen.getByRole('heading', { name: 'Edit route' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Save changes' })).toBeInTheDocument();
   });

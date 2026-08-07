@@ -47,57 +47,11 @@ body {
 	line-height: 20px;
 }
 
-.grade-dropdowns select {
-	font-family: "Fira Sans", sans-serif;
-	font-size: 16px;
-	line-height: 20px;
-	font-weight: 500;
-	width: 90px;
-	height: 36px;
-}
-
-/* Dropdown fields - selector list must match the actual rendered ids
-   (RockScale/BoulderScale keys: french/kurtyka/uiaa/usa/british/vScale/
-   fontScale). This previously listed #v_scale/#font_scale, which never
-   matched anything, so the bouldering dropdowns silently got none of this
-   styling while the lead-climbing ones did. */
-#french,
-#kurtyka,
-#uiaa,
-#usa,
-#british,
-#vScale,
-#fontScale {
-	border-radius: 8px;
-	border: 1px solid rgba(0, 0, 0, 0.1);
-	padding: 8px 12px;
-	background-color: white;
-	cursor: pointer;
-	transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
-}
-
-#french:hover,
-#kurtyka:hover,
-#uiaa:hover,
-#usa:hover,
-#british:hover,
-#vScale:hover,
-#fontScale:hover {
-	background-color: rgba(245, 244, 251, 1);
-	border-color: rgba(98, 77, 227, 0.4);
-}
-
-#french:focus-visible,
-#kurtyka:focus-visible,
-#uiaa:focus-visible,
-#usa:focus-visible,
-#british:focus-visible,
-#vScale:focus-visible,
-#fontScale:focus-visible {
-	outline: none;
-	border-color: rgba(98, 77, 227, 1);
-	box-shadow: 0 0 0 3px rgba(98, 77, 227, 0.15);
-}
+/* Trigger button sizing/styling lives in dropdown.css (shared with
+   AddRouteModal); the actual grade pickers here are the custom Dropdown
+   component, not native <select>, so its options panel always opens below
+   and stays capped in height regardless of list length (USA has 77 grades)
+   or where the trigger sits in the viewport. */
 
 .container {
   max-width: 100%;
@@ -110,17 +64,6 @@ body {
 		margin-left: 0rem;
 		margin-right: 0rem;
         padding: 5px 10px;
-	}
-
-	.grade-dropdowns select {
-		width: 90px;
-		height: 36px;
-		font-size: 16px;
-		line-height: 20px;
-		border-radius: 8px;
-		border-width: 1px;
-		padding-left: 16px;
-		background: white;
 	}
 
 	.grade-dropdowns label {

@@ -65,6 +65,10 @@ export const translations = {
     journal_columnAction: 'Action',
     journal_editRouteTooltip: 'Edit route',
     journal_deleteRouteTooltip: 'Delete route',
+    journal_filterFrom: 'From',
+    journal_filterTo: 'To',
+    journal_clearFilters: 'Clear filters',
+    journal_noRoutesInRange: 'No routes in this date range.',
 
     // AddRouteModal
     modal_addTitle: 'Add new route to your journal',
@@ -142,6 +146,10 @@ export const translations = {
     journal_columnAction: 'Akcja',
     journal_editRouteTooltip: 'Edytuj drogę',
     journal_deleteRouteTooltip: 'Usuń drogę',
+    journal_filterFrom: 'Od',
+    journal_filterTo: 'Do',
+    journal_clearFilters: 'Wyczyść filtry',
+    journal_noRoutesInRange: 'Brak dróg w tym zakresie dat.',
 
     // AddRouteModal
     modal_addTitle: 'Dodaj nową drogę do dziennika',

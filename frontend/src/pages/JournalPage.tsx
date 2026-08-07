@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMemo, useState } from 'react';
+import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { ROCK_SCALE_LISTS, type RockScale } from '../data/grades';
@@ -40,6 +40,8 @@ export function JournalPage() {
   const [order, setOrder] = useState<SortOrder>('desc');
   const [modalTarget, setModalTarget] = useState<ModalTarget>('closed');
   const [actionError, setActionError] = useState<string | null>(null);
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
 
   const {
     data: routes = [],
@@ -51,7 +53,27 @@ export function JournalPage() {
     queryKey: ['routes', user?.id, sortBy, order],
     queryFn: () => fetchRoutes(sortBy, order),
     enabled: !!user,
+    // Keep showing the previous page's rows while the new sort order loads
+    // instead of dropping back to a bare "Loading…" state - toggling sort
+    // used to replace the whole table with a loading message every time.
+    placeholderData: keepPreviousData,
   });
+
+  const hasActiveDateFilter = !!fromDate || !!toDate;
+
+  const filteredRoutes = useMemo(() => {
+    if (!hasActiveDateFilter) return routes;
+    return routes.filter((route) => {
+      if (fromDate && route.climb_date < fromDate) return false;
+      if (toDate && route.climb_date > toDate) return false;
+      return true;
+    });
+  }, [routes, fromDate, toDate, hasActiveDateFilter]);
+
+  function clearDateFilters() {
+    setFromDate('');
+    setToDate('');
+  }
 
   const createMutation = useMutation({
     mutationFn: createRoute,
@@ -108,16 +130,46 @@ export function JournalPage() {
 
       <div className="routes-section">
         <div className="table-section">
-          <div className="grade-filter">
-            <label htmlFor="grade-filter">{t('journal_gradeScale')}</label>
-            <br />
-            <select id="grade-filter" value={scale} onChange={(e) => setScale(e.target.value as RockScale)}>
-              {(Object.keys(ROCK_SCALE_LISTS) as RockScale[]).map((option) => (
-                <option key={option} value={option}>
-                  {SCALE_LABELS[option]}
-                </option>
-              ))}
-            </select>
+          <div className="table-filters">
+            <div className="grade-filter">
+              <label htmlFor="grade-filter">{t('journal_gradeScale')}</label>
+              <br />
+              <select id="grade-filter" value={scale} onChange={(e) => setScale(e.target.value as RockScale)}>
+                {(Object.keys(ROCK_SCALE_LISTS) as RockScale[]).map((option) => (
+                  <option key={option} value={option}>
+                    {SCALE_LABELS[option]}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="date-filter">
+              <div className="date-filter-field">
+                <label htmlFor="filter-from">{t('journal_filterFrom')}</label>
+                <input
+                  id="filter-from"
+                  type="date"
+                  value={fromDate}
+                  max={toDate || undefined}
+                  onChange={(e) => setFromDate(e.target.value)}
+                />
+              </div>
+              <div className="date-filter-field">
+                <label htmlFor="filter-to">{t('journal_filterTo')}</label>
+                <input
+                  id="filter-to"
+                  type="date"
+                  value={toDate}
+                  min={fromDate || undefined}
+                  onChange={(e) => setToDate(e.target.value)}
+                />
+              </div>
+              {hasActiveDateFilter && (
+                <button type="button" className="clear-filters-btn" onClick={clearDateFilters}>
+                  {t('journal_clearFilters')}
+                </button>
+              )}
+            </div>
           </div>
 
           {actionError && (
@@ -132,10 +184,14 @@ export function JournalPage() {
             <p>{t('journal_loading')}</p>
           ) : isError ? (
             <p role="alert">{t('journal_loadError')}</p>
+          ) : filteredRoutes.length === 0 && hasActiveDateFilter ? (
+            <p>{t('journal_noRoutesInRange')}</p>
           ) : (
             <RouteTable
-              routes={routes}
+              routes={filteredRoutes}
               scale={scale}
+              sortBy={sortBy}
+              order={order}
               onToggleDateOrder={() => toggleOrder('date')}
               onToggleGradeOrder={() => toggleOrder('grade')}
               onEdit={(route) => setModalTarget(route)}

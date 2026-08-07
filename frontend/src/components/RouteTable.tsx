@@ -1,17 +1,34 @@
 import { formatRockGrade, type RockScale } from '../data/grades';
 import type { Route } from '../api/routes';
+import type { SortBy, SortOrder } from '../api/routes';
 import { useLanguage } from '../context/LanguageContext';
 
 interface RouteTableProps {
   routes: Route[];
   scale: RockScale;
+  sortBy: SortBy;
+  order: SortOrder;
   onToggleDateOrder: () => void;
   onToggleGradeOrder: () => void;
   onEdit: (route: Route) => void;
   onDelete: (id: number) => void;
 }
 
-export function RouteTable({ routes, scale, onToggleDateOrder, onToggleGradeOrder, onEdit, onDelete }: RouteTableProps) {
+function sortIconClass(column: SortBy, activeSortBy: SortBy, order: SortOrder): string {
+  if (column !== activeSortBy) return 'fa-sort';
+  return order === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
+}
+
+export function RouteTable({
+  routes,
+  scale,
+  sortBy,
+  order,
+  onToggleDateOrder,
+  onToggleGradeOrder,
+  onEdit,
+  onDelete,
+}: RouteTableProps) {
   const { t } = useLanguage();
 
   function handleDelete(id: number) {
@@ -27,12 +44,24 @@ export function RouteTable({ routes, scale, onToggleDateOrder, onToggleGradeOrde
           <th>#</th>
           <th>{t('journal_columnName')}</th>
           <th>
-            <a className="fa-solid fa-sort" href="#sort-grade" onClick={(e) => { e.preventDefault(); onToggleGradeOrder(); }} />
-            <a> {t('journal_columnGrade')}</a>
+            <button
+              type="button"
+              className={sortBy === 'grade' ? 'sort-header active' : 'sort-header'}
+              onClick={onToggleGradeOrder}
+            >
+              {t('journal_columnGrade')}
+              <i className={`fa-solid ${sortIconClass('grade', sortBy, order)}`} />
+            </button>
           </th>
           <th>
-            <a className="fa-solid fa-sort" href="#sort-date" onClick={(e) => { e.preventDefault(); onToggleDateOrder(); }} />
-            <a> {t('journal_columnDate')}</a>
+            <button
+              type="button"
+              className={sortBy === 'date' ? 'sort-header active' : 'sort-header'}
+              onClick={onToggleDateOrder}
+            >
+              {t('journal_columnDate')}
+              <i className={`fa-solid ${sortIconClass('date', sortBy, order)}`} />
+            </button>
           </th>
           <th>{t('journal_columnComment')}</th>
           <th>{t('journal_columnAction')}</th>

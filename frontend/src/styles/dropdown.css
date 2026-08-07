@@ -1,0 +1,101 @@
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    width: 90px;
+    height: 36px;
+    font-family: "Fira Sans", sans-serif;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 500;
+    color: black;
+    border-radius: 8px;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    padding: 8px 10px;
+    background-color: white;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.dropdown-placeholder {
+    color: rgba(158, 158, 158, 1);
+}
+
+.dropdown-chevron {
+    font-size: 11px;
+    color: rgba(158, 158, 158, 1);
+    flex-shrink: 0;
+}
+
+.dropdown-trigger:hover {
+    background-color: rgba(245, 244, 251, 1);
+    border-color: rgba(98, 77, 227, 0.4);
+}
+
+.dropdown-trigger:focus-visible,
+.dropdown-trigger[aria-expanded="true"] {
+    outline: none;
+    border-color: rgba(98, 77, 227, 1);
+    box-shadow: 0 0 0 3px rgba(98, 77, 227, 0.15);
+}
+
+.dropdown-panel {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    z-index: 50;
+    min-width: 100%;
+    max-height: 240px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 4px;
+}
+
+.dropdown-option {
+    text-align: left;
+    border: none;
+    background: none;
+    border-radius: 6px;
+    padding: 8px 10px;
+    font-family: "Fira Sans", sans-serif;
+    font-size: 15px;
+    color: black;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.1s ease, color 0.1s ease;
+}
+
+.dropdown-option:hover,
+.dropdown-option:focus-visible {
+    background-color: rgba(151, 71, 255, 0.07);
+    color: rgba(98, 77, 227, 1);
+    outline: none;
+}
+
+.dropdown-option.selected {
+    background-color: rgba(98, 77, 227, 0.1);
+    color: rgba(98, 77, 227, 1);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    .dropdown-trigger {
+        width: 100%;
+    }
+
+    .dropdown-panel {
+        max-height: 200px;
+    }
+}

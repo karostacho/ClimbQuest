@@ -12,9 +12,11 @@ import {
   type RockScale,
 } from '../data/grades';
 import { useLanguage } from '../context/LanguageContext';
+import { Dropdown } from '../components/Dropdown';
 import background from '../assets/photos/background_image.jpg';
 import '../styles/home_page.css';
 import '../styles/graphic_section.css';
+import '../styles/dropdown.css';
 
 const ROCK_SCALE_COLUMN_INDEX: Record<RockScale, number> = { usa: 1, french: 2, uiaa: 3, british: 4, kurtyka: 5 };
 const BOULDER_SCALE_COLUMN_INDEX: Record<BoulderScale, number> = { vScale: 1, fontScale: 2 };
@@ -55,17 +57,12 @@ export function HomePage() {
           {(Object.keys(ROCK_SCALE_LISTS) as RockScale[]).map((scale) => (
             <div className="grade-dropdowns" key={scale}>
               <label htmlFor={scale}>{scaleLabel(scale)}</label>
-              <select
+              <Dropdown
                 id={scale}
-                value={rockRow?.[ROCK_SCALE_COLUMN_INDEX[scale]] ?? ''}
-                onChange={(e) => handleRockChange(scale, e.target.value)}
-              >
-                {ROCK_SCALE_LISTS[scale].map((grade) => (
-                  <option key={grade} value={grade}>
-                    {grade}
-                  </option>
-                ))}
-              </select>
+                value={(rockRow?.[ROCK_SCALE_COLUMN_INDEX[scale]] as string) ?? ''}
+                options={ROCK_SCALE_LISTS[scale]}
+                onChange={(value) => handleRockChange(scale, value)}
+              />
             </div>
           ))}
         </div>
@@ -78,17 +75,12 @@ export function HomePage() {
           {(Object.keys(BOULDER_SCALE_LISTS) as BoulderScale[]).map((scale) => (
             <div className="grade-dropdowns" key={scale}>
               <label htmlFor={scale}>{scale === 'vScale' ? 'V-scale' : 'Font Scale'}</label>
-              <select
+              <Dropdown
                 id={scale}
-                value={boulderRow?.[BOULDER_SCALE_COLUMN_INDEX[scale]] ?? ''}
-                onChange={(e) => handleBoulderChange(scale, e.target.value)}
-              >
-                {BOULDER_SCALE_LISTS[scale].map((grade) => (
-                  <option key={grade} value={grade}>
-                    {grade}
-                  </option>
-                ))}
-              </select>
+                value={(boulderRow?.[BOULDER_SCALE_COLUMN_INDEX[scale]] as string) ?? ''}
+                options={BOULDER_SCALE_LISTS[scale]}
+                onChange={(value) => handleBoulderChange(scale, value)}
+              />
             </div>
           ))}
         </div>

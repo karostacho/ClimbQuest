@@ -2,6 +2,8 @@ import { useState, type FormEvent } from 'react';
 import { ROCK_SCALE_LISTS, findRockGradeIndex, formatRockGrade, type RockScale } from '../data/grades';
 import type { Route } from '../api/routes';
 import { useLanguage } from '../context/LanguageContext';
+import { Dropdown } from './Dropdown';
+import '../styles/dropdown.css';
 
 interface AddRouteModalProps {
   isSubmitting: boolean;
@@ -134,18 +136,12 @@ export function AddRouteModal({ isSubmitting, editingRoute, displayScale, onClos
             {(Object.keys(ROCK_SCALE_LISTS) as RockScale[]).map((scale) => (
               <div className="grade-dropdowns" key={scale}>
                 <label htmlFor={scale}>{SCALE_LABELS[scale]}</label>
-                <select
+                <Dropdown
                   id={scale}
                   value={selectedScale === scale ? selectedGrade : ''}
-                  onChange={(e) => handleGradeChange(scale, e.target.value)}
-                >
-                  <option value=""> </option>
-                  {ROCK_SCALE_LISTS[scale].map((grade) => (
-                    <option key={grade} value={grade}>
-                      {grade}
-                    </option>
-                  ))}
-                </select>
+                  options={ROCK_SCALE_LISTS[scale]}
+                  onChange={(value) => handleGradeChange(scale, value)}
+                />
               </div>
             ))}
           </div>
