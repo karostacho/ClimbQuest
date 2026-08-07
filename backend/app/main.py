@@ -1,8 +1,8 @@
 import logging
 from pathlib import Path
 
-from fastapi import FastAPI, Request
-from fastapi.responses import FileResponse
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.responses import FileResponse, Response
 from fastapi.staticfiles import StaticFiles
 
 from app.routers import auth, routes
@@ -24,6 +24,24 @@ async def no_store_except_hashed_assets(request: Request, call_next):
     return response
 
 
+@app.middleware("http")
+async def security_headers(request: Request, call_next):
+    response = await call_next(request)
+    # Fonts/icons are loaded from these two origins (see frontend/index.html);
+    # everything else is same-origin. Tighten further if those are ever
+    # self-hosted instead.
+    response.headers["Content-Security-Policy"] = (
+        "default-src 'self'; "
+        "script-src 'self' https://kit.fontawesome.com; "
+        "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://ka-f.fontawesome.com; "
+        "font-src 'self' https://fonts.gstatic.com https://ka-f.fontawesome.com data:; "
+        "img-src 'self' data:; "
+        "connect-src 'self' https://ka-f.fontawesome.com"
+    )
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    return response
+
+
 app.include_router(auth.router)
 app.include_router(routes.router)
 
@@ -40,11 +58,23 @@ def health() -> dict[str, str]:
 FRONTEND_DIST = Path(__file__).resolve().parent.parent.parent / "frontend" / "dist"
 
 if FRONTEND_DIST.is_dir():
+    FRONTEND_DIST_RESOLVED = FRONTEND_DIST.resolve()
     app.mount("/assets", StaticFiles(directory=FRONTEND_DIST / "assets"), name="assets")
 
     @app.get("/{full_path:path}")
-    def serve_spa(full_path: str) -> FileResponse:
-        candidate = FRONTEND_DIST / full_path
-        if full_path and candidate.is_file():
-            return FileResponse(candidate)
+    def serve_spa(full_path: str) -> Response:
+        # full_path is attacker-controlled and Starlette's :path convertor
+        # does no dot-segment normalization, so a raw ".." (or its
+        # percent-encoded form, which arrives already decoded here) could
+        # otherwise escape FRONTEND_DIST and read arbitrary files from the
+        # bundled repo checkout. Resolve and verify containment before ever
+        # touching the filesystem.
+        if full_path.startswith("api/"):
+            raise HTTPException(status_code=404, detail="Not Found")
+
+        if full_path:
+            candidate = (FRONTEND_DIST / full_path).resolve()
+            if candidate.is_relative_to(FRONTEND_DIST_RESOLVED) and candidate.is_file():
+                return FileResponse(candidate)
+
         return FileResponse(FRONTEND_DIST / "index.html")

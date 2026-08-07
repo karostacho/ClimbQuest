@@ -7,7 +7,10 @@ import signUpImage from '../assets/photos/sign_up.jpg';
 import '../styles/general_form_page.css';
 
 const EMAIL_REGEX = /^[^@]+@[^@]+\.[^@]+$/;
-const PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/;
+// Matches the server's rule exactly (schemas.py: any non-alphanumeric
+// counts as a special character) - a narrower client-side whitelist here
+// previously rejected passwords the server would have accepted.
+const PASSWORD_REGEX = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[^a-zA-Z0-9]).{8,}$/;
 const PASSWORD_HINT =
   'Password must be at least 8 characters and must contain at least: 1 lowercase letter, 1 uppercase letter, 1 numeric character, and 1 special character';
 

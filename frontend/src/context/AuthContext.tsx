@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
-import { ApiError } from '../api/client';
+import { useQueryClient } from '@tanstack/react-query';
+import { ApiError, setUnauthorizedHandler } from '../api/client';
 import { fetchCurrentUser, login as loginRequest, logout as logoutRequest, register as registerRequest, type User } from '../api/auth';
 
 interface AuthContextValue {
@@ -13,15 +14,26 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const queryClient = useQueryClient();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Any 401 from any request (not just this initial check) routes through
+    // here too, so an expired/invalid session clears `user` immediately
+    // instead of leaving stale auth state around.
+    setUnauthorizedHandler(() => {
+      setUser(null);
+      queryClient.clear();
+    });
+
     fetchCurrentUser()
       .then(setUser)
       .catch(() => setUser(null))
       .finally(() => setIsLoading(false));
-  }, []);
+
+    return () => setUnauthorizedHandler(null);
+  }, [queryClient]);
 
   async function login(email: string, password: string) {
     const loggedInUser = await loginRequest(email, password);
@@ -35,6 +47,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function logout() {
     await logoutRequest();
     setUser(null);
+    // Prevents the next user who logs in on this tab from briefly seeing
+    // this user's cached /api/routes data before the fresh fetch resolves.
+    queryClient.clear();
   }
 
   return (

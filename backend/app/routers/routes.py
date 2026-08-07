@@ -25,7 +25,7 @@ def list_routes(
     stmt = (
         select(Route)
         .where(Route.user_id == current_user.id)
-        .order_by(direction(column), desc(Route.grade_index), asc(Route.route_name))
+        .order_by(direction(column), desc(Route.grade_index), asc(Route.route_name), asc(Route.id))
     )
     return list(db.scalars(stmt))
 

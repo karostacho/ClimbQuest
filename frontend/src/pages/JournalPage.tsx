@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useAuth } from '../context/AuthContext';
 import { ROCK_SCALE_LISTS, type RockScale } from '../data/grades';
 import { createRoute, deleteRoute, fetchRoutes, type SortBy, type SortOrder } from '../api/routes';
 import { RouteTable } from '../components/RouteTable';
@@ -17,28 +18,43 @@ const SCALE_LABELS: Record<RockScale, string> = {
 };
 
 export function JournalPage() {
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [scale, setScale] = useState<RockScale>('french');
   const [sortBy, setSortBy] = useState<SortBy>('date');
   const [order, setOrder] = useState<SortOrder>('desc');
   const [modalOpen, setModalOpen] = useState(false);
+  const [actionError, setActionError] = useState<string | null>(null);
 
-  const { data: routes = [] } = useQuery({
-    queryKey: ['routes', sortBy, order],
+  const {
+    data: routes = [],
+    isPending,
+    isError,
+  } = useQuery({
+    // Scoped by user id so switching accounts on the same tab never shows a
+    // previous user's cached rows before the fresh fetch resolves.
+    queryKey: ['routes', user?.id, sortBy, order],
     queryFn: () => fetchRoutes(sortBy, order),
+    enabled: !!user,
   });
 
   const createMutation = useMutation({
     mutationFn: createRoute,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['routes'] });
+      setActionError(null);
+      queryClient.invalidateQueries({ queryKey: ['routes', user?.id] });
       setModalOpen(false);
     },
+    onError: () => setActionError('Could not add that route. Please try again.'),
   });
 
   const deleteMutation = useMutation({
     mutationFn: deleteRoute,
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ['routes'] }),
+    onSuccess: () => {
+      setActionError(null);
+      queryClient.invalidateQueries({ queryKey: ['routes', user?.id] });
+    },
+    onError: () => setActionError('Could not delete that route. Please try again.'),
   });
 
   function toggleOrder(column: SortBy) {
@@ -79,17 +95,32 @@ export function JournalPage() {
             </select>
           </div>
 
-          <RouteTable
-            routes={routes}
-            scale={scale}
-            onToggleDateOrder={() => toggleOrder('date')}
-            onToggleGradeOrder={() => toggleOrder('grade')}
-            onDelete={(id) => deleteMutation.mutate(id)}
-          />
+          {actionError && (
+            <div className="flash-container">
+              <div className="flash-message error" role="alert">
+                {actionError}
+              </div>
+            </div>
+          )}
+
+          {isPending ? (
+            <p>Loading your routes…</p>
+          ) : isError ? (
+            <p role="alert">Could not load your routes. Please refresh the page.</p>
+          ) : (
+            <RouteTable
+              routes={routes}
+              scale={scale}
+              onToggleDateOrder={() => toggleOrder('date')}
+              onToggleGradeOrder={() => toggleOrder('grade')}
+              onDelete={(id) => deleteMutation.mutate(id)}
+            />
+          )}
         </div>
 
         {modalOpen && (
           <AddRouteModal
+            isSubmitting={createMutation.isPending}
             onClose={() => setModalOpen(false)}
             onSubmit={(data) => createMutation.mutate(data)}
           />

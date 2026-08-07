@@ -2,6 +2,7 @@ import { useState, type FormEvent } from 'react';
 import { ROCK_SCALE_LISTS, findRockGradeIndex, type RockScale } from '../data/grades';
 
 interface AddRouteModalProps {
+  isSubmitting: boolean;
   onClose: () => void;
   onSubmit: (data: { route_name: string; grade_index: number; climb_date: string; comment?: string }) => void;
 }
@@ -14,9 +15,18 @@ const SCALE_LABELS: Record<RockScale, string> = {
   british: 'British',
 };
 
-const today = new Date().toISOString().split('T')[0];
+// Local calendar date, not new Date().toISOString() (which is UTC and would
+// show yesterday/tomorrow near midnight depending on timezone).
+function getLocalDateString(): string {
+  const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
+}
 
-export function AddRouteModal({ onClose, onSubmit }: AddRouteModalProps) {
+export function AddRouteModal({ isSubmitting, onClose, onSubmit }: AddRouteModalProps) {
+  const today = getLocalDateString();
   const [routeName, setRouteName] = useState('');
   const [date, setDate] = useState(today);
   const [comment, setComment] = useState('');
@@ -31,6 +41,8 @@ export function AddRouteModal({ onClose, onSubmit }: AddRouteModalProps) {
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
+    if (isSubmitting) return;
+
     if (!selectedScale || !selectedGrade) {
       setError('Grade must be selected');
       return;
@@ -134,8 +146,8 @@ export function AddRouteModal({ onClose, onSubmit }: AddRouteModalProps) {
           )}
 
           <div className="modal-submit-btn">
-            <button type="submit" id="submitBtn">
-              Submit
+            <button type="submit" id="submitBtn" disabled={isSubmitting}>
+              {isSubmitting ? 'Submitting…' : 'Submit'}
             </button>
           </div>
         </form>

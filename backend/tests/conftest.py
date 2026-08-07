@@ -1,7 +1,10 @@
 import os
 
-os.environ.setdefault("DATABASE_URL", "sqlite:///:memory:")
-os.environ.setdefault("JWT_SECRET", "test-secret")
+# Force these regardless of what's already exported in the shell - tests
+# must never run against a real database just because a developer has
+# DATABASE_URL set for local backend work (setdefault() wouldn't override it).
+os.environ["DATABASE_URL"] = "sqlite:///:memory:"
+os.environ["JWT_SECRET"] = "test-secret"
 
 import pytest
 from fastapi.testclient import TestClient
@@ -15,17 +18,34 @@ from app.main import app
 
 
 @pytest.fixture()
-def client():
+def db_session_factory():
     engine = create_engine(
         "sqlite:///:memory:",
         connect_args={"check_same_thread": False},
         poolclass=StaticPool,
     )
-    TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    factory = sessionmaker(autocommit=False, autoflush=False, bind=engine)
     Base.metadata.create_all(bind=engine)
+    return factory
 
+
+@pytest.fixture(autouse=True)
+def _reset_rate_limits():
+    # The rate limiter's attempt log is module-level state in app.routers.auth,
+    # shared across every test in the same process; TestClient always presents
+    # the same fake IP, so without this, unrelated tests would trip each
+    # other's limits and start failing with 429s instead of the status they're
+    # actually asserting on.
+    from app.routers.auth import _ATTEMPT_LOG
+
+    _ATTEMPT_LOG.clear()
+    yield
+
+
+@pytest.fixture()
+def client(db_session_factory):
     def override_get_db():
-        db = TestingSessionLocal()
+        db = db_session_factory()
         try:
             yield db
         finally:
