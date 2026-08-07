@@ -314,6 +314,11 @@ td {
     line-height: 21px;
 }
 
+th:last-child,
+td:last-child {
+    text-align: center;
+}
+
 tr:nth-child(odd) {
     background-color: rgba(247, 246, 254, 1)
 }
@@ -329,18 +334,49 @@ th {
 
 .fa-trash-can {
     color: #a30d11;
-    text-decoration: none
 }
 
-.fa-pen {
+.fa-pen-to-square {
     color: rgba(98, 77, 227, 1);
-    text-decoration: none;
+}
+
+.icons-container {
+    display: flex;
+    justify-content: center;
 }
 
 .icons {
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: 0.5rem;
+}
+
+/* Shared icon-button treatment: fixed small size, centered, and a soft
+   circular highlight on hover so it's obvious the icon is clickable. */
+.icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+    border-radius: 50%;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease, transform 0.1s ease;
+}
+
+.icon-btn:hover {
+    transform: scale(1.08);
+}
+
+.icon-btn.fa-pen-to-square:hover {
+    background-color: rgba(98, 77, 227, 0.12);
+}
+
+.icon-btn.fa-trash-can:hover {
+    background-color: rgba(163, 13, 17, 0.12);
 }
 
 @media (max-width: 1025px) {

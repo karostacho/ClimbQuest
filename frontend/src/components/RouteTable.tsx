@@ -49,13 +49,13 @@ export function RouteTable({ routes, scale, onToggleDateOrder, onToggleGradeOrde
                   <a
                     href="#edit"
                     onClick={(e) => { e.preventDefault(); onEdit(route); }}
-                    className="fa-solid fa-pen fa-xl"
+                    className="icon-btn fa-regular fa-pen-to-square"
                     title="Edit route"
                   />
                   <a
                     href="#delete"
                     onClick={(e) => { e.preventDefault(); handleDelete(route.id); }}
-                    className="fa-regular fa-trash-can fa-xl"
+                    className="icon-btn fa-regular fa-trash-can"
                     title="Delete route"
                   />
                 </div>
