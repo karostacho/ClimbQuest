@@ -229,6 +229,9 @@ input {
 }
 
 .grade-filter {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
     text-align: left;
 }
 
@@ -292,6 +295,13 @@ input {
     border-color: rgba(98, 77, 227, 0.4);
 }
 
+/* Kept in the layout (not conditionally rendered) so the filter row's
+   width - and everything left of it, since the row is right-aligned -
+   stays put whether a date filter is active or not. */
+.clear-filters-btn.is-hidden {
+    visibility: hidden;
+}
+
 @media (max-width: 768px) {
     .table-filters {
         justify-content: center;
@@ -305,13 +315,17 @@ input {
 }
 
 #grade-filter {
-    width: 102px;
-    height: 40px;
+    width: 110px;
+    height: 38px;
     border-radius: 8px;
     border: 1px solid rgba(208, 213, 221, 1);
-    padding: 8px 12px;
+    padding: 6px 10px;
     background-color: white;
     cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 14px;
+    text-align: left;
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
@@ -330,16 +344,6 @@ input {
     font-size: 14px;
     font-weight: 400;
     line-height: 20px;
-    text-align: left;
-}
-
-.grade-filter select {
-    margin-top: 5%;
-    font-family: 'Poppins', sans-serif;
-    font-weight: 500;
-    line-height: 20px;
-    font-size: 14px;
-    text-align: center;
 }
 
 .table-section table {

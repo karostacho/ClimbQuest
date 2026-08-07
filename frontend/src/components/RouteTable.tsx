@@ -6,7 +6,7 @@ import { useLanguage } from '../context/LanguageContext';
 interface RouteTableProps {
   routes: Route[];
   scale: RockScale;
-  sortBy: SortBy;
+  sortBy: SortBy | null;
   order: SortOrder;
   onToggleDateOrder: () => void;
   onToggleGradeOrder: () => void;
@@ -14,7 +14,7 @@ interface RouteTableProps {
   onDelete: (id: number) => void;
 }
 
-function sortIconClass(column: SortBy, activeSortBy: SortBy, order: SortOrder): string {
+function sortIconClass(column: SortBy, activeSortBy: SortBy | null, order: SortOrder): string {
   if (column !== activeSortBy) return 'fa-sort';
   return order === 'asc' ? 'fa-sort-up' : 'fa-sort-down';
 }

@@ -36,12 +36,18 @@ export function JournalPage() {
   const { t } = useLanguage();
   const queryClient = useQueryClient();
   const [scale, setScale] = useState<RockScale>('french');
-  const [sortBy, setSortBy] = useState<SortBy>('date');
+  // null = neither column actively chosen by the user (falls back to the
+  // date/desc default below); set once a header is clicked, and cleared
+  // again on a third click of the same header.
+  const [sortBy, setSortBy] = useState<SortBy | null>('date');
   const [order, setOrder] = useState<SortOrder>('desc');
   const [modalTarget, setModalTarget] = useState<ModalTarget>('closed');
   const [actionError, setActionError] = useState<string | null>(null);
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
+
+  const effectiveSortBy = sortBy ?? 'date';
+  const effectiveOrder = sortBy ? order : 'desc';
 
   const {
     data: routes = [],
@@ -50,8 +56,8 @@ export function JournalPage() {
   } = useQuery({
     // Scoped by user id so switching accounts on the same tab never shows a
     // previous user's cached rows before the fresh fetch resolves.
-    queryKey: ['routes', user?.id, sortBy, order],
-    queryFn: () => fetchRoutes(sortBy, order),
+    queryKey: ['routes', user?.id, effectiveSortBy, effectiveOrder],
+    queryFn: () => fetchRoutes(effectiveSortBy, effectiveOrder),
     enabled: !!user,
     // Keep showing the previous page's rows while the new sort order loads
     // instead of dropping back to a bare "Loading…" state - toggling sort
@@ -104,11 +110,18 @@ export function JournalPage() {
     onError: () => setActionError(t('journal_deleteError')),
   });
 
+  // Cycles a header through three states: desc -> asc -> neutral (both
+  // headers unsorted, back to the date/desc default) -> desc again.
   function toggleOrder(column: SortBy) {
-    if (sortBy === column) {
-      setOrder((current) => (current === 'asc' ? 'desc' : 'asc'));
-    } else {
+    if (sortBy !== column) {
       setSortBy(column);
+      setOrder('desc');
+      return;
+    }
+    if (order === 'desc') {
+      setOrder('asc');
+    } else {
+      setSortBy(null);
       setOrder('desc');
     }
   }
@@ -133,7 +146,6 @@ export function JournalPage() {
           <div className="table-filters">
             <div className="grade-filter">
               <label htmlFor="grade-filter">{t('journal_gradeScale')}</label>
-              <br />
               <select id="grade-filter" value={scale} onChange={(e) => setScale(e.target.value as RockScale)}>
                 {(Object.keys(ROCK_SCALE_LISTS) as RockScale[]).map((option) => (
                   <option key={option} value={option}>
@@ -164,11 +176,14 @@ export function JournalPage() {
                   onChange={(e) => setToDate(e.target.value)}
                 />
               </div>
-              {hasActiveDateFilter && (
-                <button type="button" className="clear-filters-btn" onClick={clearDateFilters}>
-                  {t('journal_clearFilters')}
-                </button>
-              )}
+              <button
+                type="button"
+                className={hasActiveDateFilter ? 'clear-filters-btn' : 'clear-filters-btn is-hidden'}
+                onClick={clearDateFilters}
+                disabled={!hasActiveDateFilter}
+              >
+                {t('journal_clearFilters')}
+              </button>
             </div>
           </div>
 
