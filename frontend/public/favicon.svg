@@ -2,10 +2,9 @@
   <clipPath id="climbquest-circle">
     <circle cx="24" cy="24" r="24" />
   </clipPath>
-  <circle cx="24" cy="24" r="24" fill="#624DE3" />
-  <path
-    d="M2 41 L11 21 L17 29 L24 11 L31 29 L37 21 L46 41 Z"
-    fill="#FFFFFF"
-    clip-path="url(#climbquest-circle)"
-  />
+  <circle cx="24" cy="24" r="24" fill="#000000" />
+  <g clip-path="url(#climbquest-circle)">
+    <polygon points="2,40 14,18 26,40" fill="#FFFFFF" />
+    <polygon points="18,40 32,12 46,40" fill="#FFFFFF" stroke="#000000" stroke-width="1.4" stroke-linejoin="round" />
+  </g>
 </svg>
